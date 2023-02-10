@@ -3,13 +3,13 @@
 <ol>
 <li><p>fopen函数返回一个FILE*结构体指针，那么该指针指向什么区域？<br>答：存放在堆区。<br>因为结构体中的变量是局部变量存放在栈中，那么当函数调用结束返回时，那个指针指向的空间已经被释放，所以不是栈。<br>也不能是静态区，因为用static修饰的时候，一个变量只会被声明一次，那么在整个函数中你只能调用一次fopen，否则打开第二个文件第一个就会失效。<br>因为堆内的空间又malloc申请，由free释放所以是最佳选择。<br>小窍门：如果返回指针的函数有互逆操作（fclose与fopen），那么返回指针大概率指向堆区。</p>
 </li>
-<li><p>int <em>p&#x3D;(int</em>)mallloc(sizeof(int))<br>这种强制类型转换不是在解决问题，为实在掩盖问题。不强转报错的原因是没有引用&lt;stdlib.h&gt;的头文件。</p>
+<li><p>int * p&#x3D;(int * )mallloc(sizeof(int))<br>这种强制类型转换不是在解决问题，为实在掩盖问题。不强转报错的原因是没有引用&lt;stdlib.h&gt;的头文件。</p>
 </li>
 <li><p>linux中查看errno含义的路径<br>&#x2F;usr&#x2F;include&#x2F;asm-generic&#x2F;errno-base.h</p>
 </li>
 </ol>
 <p>4.一共有三种类型的报错方式<br>打印errno&#x3D;%d;  perror(“某函数”)； 打印sterror(errno);</p>
-<p>5.const修饰指针<br>const int<em>p &#x3D;&amp;a ：const修饰</em>p ，*p不可变（内容不可变）<br>int * const p &#x3D;&amp;a ：const修饰p，p不可变（p中地址不可变）</p>
+<p>5.const修饰指针<br>const int * p &#x3D;&amp;a ：const修饰* p ，* p不可变（内容不可变）<br>int * const p &#x3D;&amp;a ：const修饰p，p不可变（p中地址不可变）</p>
 <p>6.指针变量与变量指针<br>指针变量是个变量<br>变量指针是个指针，指针就是内存地址<br>p&#x3D;&amp;a ； 左边是指针变量，右边是指针</p>
 </div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>下一篇：<a href="/2023/02/09/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/">我的第一篇文章</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
