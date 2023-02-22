@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-22T01:39:57.386Z</updated>
+  <updated>2023-02-22T06:36:24.948Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,15 +21,15 @@
     <link href="http://example.com/2023/02/22/dat-4/"/>
     <id>http://example.com/2023/02/22/dat-4/</id>
     <published>2023-02-22T01:39:06.000Z</published>
-    <updated>2023-02-22T01:39:57.386Z</updated>
+    <updated>2023-02-22T06:36:24.948Z</updated>
     
-    <content type="html"><![CDATA[<p>1.Linux下的清屏操作？<br>答：system(“reset”); 需要包含头文件<stdlib></p>]]></content>
+    <content type="html"><![CDATA[<p>1.Linux下的清屏操作？<br>答：system(“reset”); 需要包含头文件<stdlib></p><p>2.如何比较字符串？（char<em>）<br>答：用函数int  strcmp(const char</em> s1,const char * s2),字符串相等返回0，否则大于返回1，小于返回-1，需要包含头文件<string></p><p>3.如何比较字符串？（string）<br>答：string是c++中的类型，可以直接使用&#x3D;&#x3D;进行比较！！！</p><p>4.swicth语句中，若case代码过长，需要加{}。</p><p>5.在Linux中如果自定义函数名为黄色说明与库中函数重名。</p>]]></content>
     
     
       
       
     <summary type="html">&lt;p&gt;1.Linux下的清屏操作？&lt;br&gt;答：system(“reset”); 需要包含头文件&lt;stdlib&gt;&lt;/p&gt;
-</summary>
+&lt;p&gt;2.如何比较字符串？（char&lt;em&gt;）&lt;br&gt;答：用函数int  strcmp(const char&lt;/em&gt; s1,const char * s2),</summary>
       
     
     
