@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-15T05:04:51.744Z</updated>
+  <updated>2023-02-22T01:39:57.386Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,12 +17,41 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>dat 4</title>
+    <link href="http://example.com/2023/02/22/dat-4/"/>
+    <id>http://example.com/2023/02/22/dat-4/</id>
+    <published>2023-02-22T01:39:06.000Z</published>
+    <updated>2023-02-22T01:39:57.386Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.Linux下的清屏操作？<br>答：system(“reset”); 需要包含头文件<stdlib></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.Linux下的清屏操作？&lt;br&gt;答：system(“reset”); 需要包含头文件&lt;stdlib&gt;&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>day 3</title>
     <link href="http://example.com/2023/02/15/day-3/"/>
     <id>http://example.com/2023/02/15/day-3/</id>
     <published>2023-02-15T05:04:51.000Z</published>
-    <updated>2023-02-15T05:04:51.744Z</updated>
+    <updated>2023-02-21T02:48:25.499Z</updated>
     
+    <content type="html"><![CDATA[<p>1.const与static的区别？<br>答：const定义的常量在超出作用域后会释放，而static定义的常量不会在函数运行完后被释放。</p><p>2.如何生成随机数？<br>答：int random &#x3D;rand（）%100 ； 这样会生成0-99的假随机数。</p><p>3.如何生成真随机数？<br>答：还是使用上面的语句，但是在main函数里加srand((unsigned int)time(NULL))；并包含<ctime>的头文件。</p><p>4.为什么用string定义的字符串cout时出警告？<br>答：因为没有包含头文件<string></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.const与static的区别？&lt;br&gt;答：const定义的常量在超出作用域后会释放，而static定义的常量不会在函数运行完后被释放。&lt;/p&gt;
+&lt;p&gt;2.如何生成随机数？&lt;br&gt;答：int random &amp;#x3D;rand（）%100 ； 这样会生成0-99的假随机</summary>
+      
     
     
     
