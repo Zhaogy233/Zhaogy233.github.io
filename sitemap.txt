@@ -1,3 +1,4 @@
+http://example.com/2023/02/25/day-6/
 http://example.com/2023/02/23/day-5/
 http://example.com/2023/02/22/dat-4/
 http://example.com/2023/02/15/day-3/
