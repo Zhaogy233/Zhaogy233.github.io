@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-26T08:49:52.846Z</updated>
+  <updated>2023-02-27T01:12:16.874Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>day 8</title>
+    <link href="http://example.com/2023/02/27/day-8/"/>
+    <id>http://example.com/2023/02/27/day-8/</id>
+    <published>2023-02-27T00:52:49.000Z</published>
+    <updated>2023-02-27T01:12:16.874Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.this指针如何解决命名冲突的问题？<br>答：由于命名不规范导致成员函数内的参数名与类内成员名相同，进而调用成员函数给类内成员赋值时导致命名冲突，此时可使用this指针指向成员。this指向的永远是调用成员函数的对象。</p><p>2.如何理解返回this*时要求函数返回类型是[类名&amp;]而不是[类名]？<br>答：最关键的是如果返回类名，那么会调用默认拷贝构造函数创建一个新的对象，新对象内成员的值就是原对象的值！而返回值为类&amp;时相当于：类名&amp;  (被返回的)变量名&#x3D;*this（类名  &amp;变量名&#x3D;*this），返回的就是原对象本身。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.this指针如何解决命名冲突的问题？&lt;br&gt;答：由于命名不规范导致成员函数内的参数名与类内成员名相同，进而调用成员函数给类内成员赋值时导致命名冲突，此时可使用this指针指向成员。this指向的永远是调用成员函数的对象。&lt;/p&gt;
+&lt;p&gt;2.如何理解返回this*时要求函</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>day 7</title>
