@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-27T09:41:39.737Z</updated>
+  <updated>2023-02-28T09:41:05.729Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux 1</title>
+    <link href="http://example.com/2023/02/28/Linux-1/"/>
+    <id>http://example.com/2023/02/28/Linux-1/</id>
+    <published>2023-02-28T09:02:20.000Z</published>
+    <updated>2023-02-28T09:41:05.729Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.Linux磁盘分区的步骤？&lt;br&gt;答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。&lt;/p&gt;
+&lt;p&gt;2.Linux文件系统格式特点？&lt;br&gt;答：从物理存储看&amp;#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&amp;#x2F;‘是</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>day 9</title>
+    <link href="http://example.com/2023/02/28/day-9/"/>
+    <id>http://example.com/2023/02/28/day-9/</id>
+    <published>2023-02-28T01:08:34.000Z</published>
+    <updated>2023-02-28T07:44:38.400Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.声明重载函数的规则？<br>答：以重载关系运算符为例，判断：对象1&#x3D;&#x3D;对象2，此时使用成员函数重载会看作对象1在调用对象2。故可以写void  operator&#x3D;&#x3D;(类名  &amp;对象2).</p><p>2.什么是仿函数？<br>答：重载().</p><p>3.子类与继承的父类成员重名会怎么样？<br>答：同名子类成员会隐藏父类成员，同名子类成员函数会隐藏所有（重载）父类同名成员函数。</p><p>4.什么是菱形继承问题，要怎么解决？<br>答：继承图是一个菱形，进而导致孙子类继承了两份爷爷类的数据，而不知道使用哪个的问题。使用虚继承的方式，用virtual关键字修饰爷爷类，称为虚基类。从而使孙子所继承的成员的值是两个父亲两次赋值中的最后一次的数据。<br>注意：虚继承底层是把两个父亲继承的成员变量修改为指针，指向了虚基类的成员变量（爷爷的成员变量）。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.声明重载函数的规则？&lt;br&gt;答：以重载关系运算符为例，判断：对象1&amp;#x3D;&amp;#x3D;对象2，此时使用成员函数重载会看作对象1在调用对象2。故可以写void  operator&amp;#x3D;&amp;#x3D;(类名  &amp;amp;对象2).&lt;/p&gt;
+&lt;p&gt;2.什么是仿函数？&lt;</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>day 8</title>
@@ -63,9 +105,9 @@
     <link href="http://example.com/2023/02/25/day-6/"/>
     <id>http://example.com/2023/02/25/day-6/</id>
     <published>2023-02-25T03:14:59.000Z</published>
-    <updated>2023-02-25T09:12:05.418Z</updated>
+    <updated>2023-02-28T01:28:55.083Z</updated>
     
-    <content type="html"><![CDATA[<p>1.类与结构体的区别？<br>答：比较或者赋值结构体可以直接用两个结构体比较或赋值、而对于类，比较类是否相等需要单独比较其中的成员函数。</p><p>2.vs中如何使用头文件和源文件化简程序？<br>答：参考【黑马程序员匠心之作|C++教程从0到1入门编程】第105节。</p><p>3.默认构造函数（无参构造）调用的时候不要加()，加了会被编译器误以为是函数的声明，不会被编译器认为是创建对象。</p><p>4.匿名对象如何创建以及他的特点？<br>答：特点一：直接使用构造函数不给对象起名：”类名（10）；&#x2F;&#x2F;这是有参构造函数。“由于匿名对象没有名字，所以本行执行完就结束-&gt;会引发调用析构函数的操作。<br>      特点二：不能用拷贝构造函数初始化匿名对象。否则会被认为是堆被拷贝对象的二次声明。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.类与结构体的区别？<br>答：比较或者赋值结构体可以直接用两个结构体比较或赋值、而对于类，比较类是否相等需要单独比较其中的成员函数。</p><p>2.vs中如何使用头文件和源文件化简程序？<br>答：参考【黑马程序员匠心之作|C++教程从0到1入门编程】第105节。</p><p>3.默认构造函数（无参构造）调用的时候不要加()，加了会被编译器误以为是函数的声明，不会被编译器认为是创建对象。</p><p>4.匿名对象如何创建以及他的特点？<br>答：特点一：直接使用构造函数不给对象起名：”类名（10）；&#x2F;&#x2F;这是有参构造函数。“由于匿名对象没有名字，所以本行执行完就结束-&gt;会引发调用析构函数的操作。<br>      特点二：不能用拷贝构造函数初始化匿名对象。否则会被认为是堆被拷贝对象的二次声明。</p><p>5.无参构造函数的匿名对象怎么写？<br>答：类名（）</p>]]></content>
     
     
       
