@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-28T09:41:05.729Z</updated>
+  <updated>2023-03-01T01:02:41.483Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>C++ 9</title>
+    <link href="http://example.com/2023/03/01/C++9/"/>
+    <id>http://example.com/2023/03/01/C++9/</id>
+    <published>2023-03-01T00:46:29.000Z</published>
+    <updated>2023-03-01T01:02:41.483Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.什么是虚函数？<br>答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual及变为虚函数。</p><p>2.虚函数有什么用？<br>答：声明虚函数后，就可以使基类指向子类。</p><p>3.什么是多态？<br>答：一：有继承关系，二：子类必须重写（函数声明一样函数体不一样）父类的虚函数。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.什么是虚函数？&lt;br&gt;答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual及变为虚函数。&lt;/p&gt;
+&lt;p&gt;2.虚函数有什么用？&lt;br&gt;答：声明虚函数后，就可以使基类指向子类。&lt;/p&gt;
+&lt;p&gt;3.什么是多态？&lt;br&gt;答：一：有继承关系，二：子类必须重写（函数声</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Linux 1</title>
@@ -39,8 +61,8 @@
   
   <entry>
     <title>day 9</title>
-    <link href="http://example.com/2023/02/28/day-9/"/>
-    <id>http://example.com/2023/02/28/day-9/</id>
+    <link href="http://example.com/2023/02/28/C++8/"/>
+    <id>http://example.com/2023/02/28/C++8/</id>
     <published>2023-02-28T01:08:34.000Z</published>
     <updated>2023-02-28T07:44:38.400Z</updated>
     
@@ -60,8 +82,8 @@
   
   <entry>
     <title>day 8</title>
-    <link href="http://example.com/2023/02/27/day-8/"/>
-    <id>http://example.com/2023/02/27/day-8/</id>
+    <link href="http://example.com/2023/02/27/C++7/"/>
+    <id>http://example.com/2023/02/27/C++7/</id>
     <published>2023-02-27T00:52:49.000Z</published>
     <updated>2023-02-27T09:41:39.737Z</updated>
     
@@ -81,8 +103,8 @@
   
   <entry>
     <title>day 7</title>
-    <link href="http://example.com/2023/02/26/day-7/"/>
-    <id>http://example.com/2023/02/26/day-7/</id>
+    <link href="http://example.com/2023/02/26/C++6/"/>
+    <id>http://example.com/2023/02/26/C++6/</id>
     <published>2023-02-26T01:18:51.000Z</published>
     <updated>2023-02-26T08:49:52.846Z</updated>
     
@@ -102,8 +124,8 @@
   
   <entry>
     <title>day 6</title>
-    <link href="http://example.com/2023/02/25/day-6/"/>
-    <id>http://example.com/2023/02/25/day-6/</id>
+    <link href="http://example.com/2023/02/25/C++5/"/>
+    <id>http://example.com/2023/02/25/C++5/</id>
     <published>2023-02-25T03:14:59.000Z</published>
     <updated>2023-02-28T01:28:55.083Z</updated>
     
@@ -123,8 +145,8 @@
   
   <entry>
     <title>day 5</title>
-    <link href="http://example.com/2023/02/23/day-5/"/>
-    <id>http://example.com/2023/02/23/day-5/</id>
+    <link href="http://example.com/2023/02/23/C++4/"/>
+    <id>http://example.com/2023/02/23/C++4/</id>
     <published>2023-02-23T01:30:22.000Z</published>
     <updated>2023-02-23T08:16:42.238Z</updated>
     
@@ -144,8 +166,8 @@
   
   <entry>
     <title>dat 4</title>
-    <link href="http://example.com/2023/02/22/dat-4/"/>
-    <id>http://example.com/2023/02/22/dat-4/</id>
+    <link href="http://example.com/2023/02/22/C++3/"/>
+    <id>http://example.com/2023/02/22/C++3/</id>
     <published>2023-02-22T01:39:06.000Z</published>
     <updated>2023-02-22T06:36:24.948Z</updated>
     
@@ -165,8 +187,8 @@
   
   <entry>
     <title>day 3</title>
-    <link href="http://example.com/2023/02/15/day-3/"/>
-    <id>http://example.com/2023/02/15/day-3/</id>
+    <link href="http://example.com/2023/02/15/C++2/"/>
+    <id>http://example.com/2023/02/15/C++2/</id>
     <published>2023-02-15T05:04:51.000Z</published>
     <updated>2023-02-21T02:48:25.499Z</updated>
     
@@ -186,8 +208,8 @@
   
   <entry>
     <title>day 2</title>
-    <link href="http://example.com/2023/02/10/day-2/"/>
-    <id>http://example.com/2023/02/10/day-2/</id>
+    <link href="http://example.com/2023/02/10/C++1/"/>
+    <id>http://example.com/2023/02/10/C++1/</id>
     <published>2023-02-10T06:14:23.000Z</published>
     <updated>2023-02-10T08:54:15.878Z</updated>
     
