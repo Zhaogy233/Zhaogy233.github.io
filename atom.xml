@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-01T01:02:41.483Z</updated>
+  <updated>2023-03-01T01:52:26.816Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,16 +21,15 @@
     <link href="http://example.com/2023/03/01/C++9/"/>
     <id>http://example.com/2023/03/01/C++9/</id>
     <published>2023-03-01T00:46:29.000Z</published>
-    <updated>2023-03-01T01:02:41.483Z</updated>
+    <updated>2023-03-01T01:52:26.816Z</updated>
     
-    <content type="html"><![CDATA[<p>1.什么是虚函数？<br>答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual及变为虚函数。</p><p>2.虚函数有什么用？<br>答：声明虚函数后，就可以使基类指向子类。</p><p>3.什么是多态？<br>答：一：有继承关系，二：子类必须重写（函数声明一样函数体不一样）父类的虚函数。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.什么是虚函数？<br>答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual及变为虚函数。生成虚函数后会在类内生成指针”vfptr”，指针指向”vftable表”，表中是该虚函数的入口地址。</p><p>2.虚函数有什么用？<br>答：声明虚函数后，子类会继承父类的”vfptr”指针与”vftable”，在重写父类虚函数前”vftable”内函数地址与父类相同，重写会使”vftable”中父类虚函数地址被重写后函数地址覆盖。</p><p>3.什么是多态？<br>答：一：有继承关系，二：子类必须重写（函数声明一样函数体不一样）父类的虚函数。</p><p>4.C++中可以使用父类引用接收子类对象，这个特点应该结合虚函数使用，实现动态多态。</p><p>5.什么是动态多态？<br>答：动态多态的函数地址晚绑定，由于调用的对象不同，可以有多种形态去调用公共接口，运行阶段确定函数地址。当父类指针或引用(不是vfptr)指向子类对象(是父类中vftable中记录的地址被修改为子类对象的vftable中记录的初始地址)会发生动态多态。<br>具体效果是：不再是静态多态发生时只调用父类成员函数的情况，而是哪个对象使用接口就调用哪个对象的成员函数。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;1.什么是虚函数？&lt;br&gt;答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual及变为虚函数。&lt;/p&gt;
-&lt;p&gt;2.虚函数有什么用？&lt;br&gt;答：声明虚函数后，就可以使基类指向子类。&lt;/p&gt;
-&lt;p&gt;3.什么是多态？&lt;br&gt;答：一：有继承关系，二：子类必须重写（函数声</summary>
+    <summary type="html">&lt;p&gt;1.什么是虚函数？&lt;br&gt;答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual及变为虚函数。生成虚函数后会在类内生成指针”vfptr”，指针指向”vftable表”，表中是该虚函数的入口地址。&lt;/p&gt;
+&lt;p&gt;2.虚函数有什么用？&lt;br&gt;答：声明虚函数后，子类会</summary>
       
     
     
