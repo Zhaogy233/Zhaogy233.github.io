@@ -8,7 +8,7 @@
 <p>7.在不适用虚析构的情况下，父类指针在析构的时候，不会调用子类的析构函数，导致子类如果有队去属性，会出现内存泄漏的情况，我们要怎么处理？<br>答：与实现动态多态类似，可以在父类析构函数前加virtual实现虚析构，原理也类似，父类生成指针指向表，表中初始值为父类析构函数地址。在子类重写后表中为子类析构函数地址。与虚函数不同的是(纯)虚函数可以不要代码实现，但(纯)虚析构一定要有代码实现并一定会被执行，因为基类也可以new申请空间。</p>
 <p>8.纯虚析构是类内声明，类外实现。只要有纯虚析构一定是抽象类，无法实例化对象。通过虚析构可以解决通过父类释放子类对象的问题。</p>
 <p>9.除了使用虚析构还有什么方法能释放子类在堆中的对象？<br>答：新建一个类，把子类对象的指针传入，之后在新类的析构函数中释放子类对象。</p>
-</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>下一篇：<a href="/2023/02/28/Linux-1/">Linux 1</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/03/05/%E8%81%8C%E5%B7%A5%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">职工管理系统</a></li><li>下一篇：<a href="/2023/02/28/Linux-1/">Linux 1</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
