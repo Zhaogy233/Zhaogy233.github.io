@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-09T03:30:39.346Z</updated>
+  <updated>2023-03-10T00:59:47.292Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>c++ STL</title>
+    <link href="http://example.com/2023/03/10/c-STL/"/>
+    <id>http://example.com/2023/03/10/c-STL/</id>
+    <published>2023-03-10T00:46:29.000Z</published>
+    <updated>2023-03-10T00:59:47.292Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.利用vector容器中的swap和匿名对象原理能实现什么？<br>答：能实现内存收缩的操作，创建匿名容器x与另一个实际使用率低的容器v互换即可。vector<T>(v).swap(v).拷贝构造一份v给匿名对象x，再交换。</p><p>2.众所周知在给vector容器赋值的过程中，容器的容量会随着添加的数据而不断变化，那么我们如何确定在向vector容器中添加10万个数据中，系统为vector分配了几次内存呢？<br>答：在添加数据的循环体内加入下面这段话：<br>int num&#x3D;0;<br>int * p &#x3D;NULL;<br>if(p!&#x3D;&amp;v[0])<br>{<br>p&#x3D;&amp;v[0];<br>num++;<br>}<br>这里的v是容器，num就是重新分配内存的次数。</p><p>3.由2.引发出的开辟内存空间次数过多的问题如何解决？<br>答：利用reserve预留空间。v.reserve(100000);</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.利用vector容器中的swap和匿名对象原理能实现什么？&lt;br&gt;答：能实现内存收缩的操作，创建匿名容器x与另一个实际使用率低的容器v互换即可。vector&lt;T&gt;(v).swap(v).拷贝构造一份v给匿名对象x，再交换。&lt;/p&gt;
+&lt;p&gt;2.众所周知在给vector容器</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>c++ 模板</title>
