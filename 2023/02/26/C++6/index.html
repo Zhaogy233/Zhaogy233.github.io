@@ -7,6 +7,7 @@
 <p>6.如何理解静态成员变量中的“类内声明，类外初始化”？<br>答：声明就是定义个变量的意思，没有赋值操作，在类定义的外面才有初始化也就是赋值的操作。</p>
 <p>7.由于静态成员变量是所有对象共有的所以除了用对象进行访问还可以怎么访问？<br>答：还可以用：“类名：：静态成员变量”，的方式访问。</p>
 <p>8.为什么静态成员函数只能访问静态成员变量？<br>答：因为在类定义中的非静态成员变量不知道是哪个对象调用的。</p>
+<p>9.当函数传递的参数为类的时候，为什么要使用引用？<br>答：使用引用会防止拷贝构造的出现。因为在函数内要生成局部变量，如果不传引用，那么就要创建对象，此时会调用拷贝构造。</p>
 </div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/02/27/C++7/">day 8</a></li><li>下一篇：<a href="/2023/02/25/C++5/">day 6</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
 

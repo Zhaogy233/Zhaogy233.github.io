@@ -2,6 +2,15 @@
 </head><body><header class="container" id="header"><div class="header"><div class="header-left"><div class="avatar"><img src="/images/avatar.png"></div><div class="author"><div class="author-name"><a href="/">Zhaogy233</a></div><div class="about-me">Hi~</div></div></div><div class="header-right"><ul class="navigation"><li><a href="/archives">归档</a></li></ul></div><div class="about-me-mask"><div class="about-me-wrap"><div class="about-me__header"><div class="avatar"><img src="/images/avatar.png"></div></div><ul class="socials"><li class="social-item"><span class="label"><img src="/images/socials/github.svg" alt="https://github.com/Zhaogy233"></span><a href="https://github.com/Zhaogy233" target="_blank" title="https://github.com/Zhaogy233">https://github.com/Zhaogy233</a></li><li class="social-item"><span class="label"><img src="/images/socials/email.svg" alt="3468482206@qq.com"></span><span>3468482206@qq.com</span></li><li class="social-item"><span class="label"><img src="/images/socials/wechat.svg" alt="z15566143013"></span><span>z15566143013</span></li></ul></div></div></div></header><div class="container home"><section class="article"><a class="title" href="/2023/03/10/c-STL/">c++ STL</a><div class="content excerpt"><p>1.利用vector容器中的swap和匿名对象原理能实现什么？<br>答：能实现内存收缩的操作，创建匿名容器x与另一个实际使用率低的容器v互换即可。vector<T>(v).swap(v).拷贝构造一份v给匿名对象x，再交换。</p>
 <p>2.众所周知在给vector容器赋值的过程中，容器的容量会随着添加的数据而不断变化，那么我们如何确定在向vector容器中添加10万个数据中，系统为vector分配了几次内存呢？<br>答：在添加数据的循环体内加入下面这段话：<br>int num&#x3D;0;<br>int * p &#x3D;NULL;<br>if(p!&#x3D;&amp;v[0])<br>{<br>p&#x3D;&amp;v[0];<br>num++;<br>}<br>这里的v是容器，num就是重新分配内存的次数。</p>
 <p>3.由2.引发出的开辟内存空间次数过多的问题如何解决？<br>答：利用reserve预留空间。v.reserve(100000);</p>
+<p>4.函数传参中如果用const修饰容器，那么使用时要注意什么？<br>答：使用iterator时，需要在前面加const：const_iterator.</p>
+<p>5.deque逻辑上是连续的物理上是离散的，那为什么还支持随机存取？<br>答：本不该支持，但为了更完美就支持了。</p>
+<p>6.利用迭代器对容器进行增删只能在头部和尾部嘛？<br>答：可以自己创建迭代器之后自增到想要删除的位置：deque<int>::iterator it&#x3D;di.begin(); it++;</p>
+<p>7.在使用stl中的算法时要包含#include<algorithm>头文件。对于可以随机存取的迭代器都可以用sort进行直接排序。</p>
+<p>8.栈为什么不能遍历？<br>答：因为遍历是非质变算法，但是想要读取栈内元素需要出栈，这是一种质变算法。</p>
+<p>9.调用函数时怎么分辨全局函数和成员函数？<br>答：对象.函数名()&#x2F;&#x2F;这是成员函数。容器List中的sort函数就是成员函数。<br>函数名()&#x2F;&#x2F;这是全局函数。</p>
+<p>10.list.sort()默认模式为升序，我们如何使用降序呢？<br>答：写个函数 bool compare(int v1,int v2){return v1&gt;v2;}&#x2F;&#x2F;如果v1&gt;v2返回值为真（如果前面的v1大于后面的v2成立），在调用list.sort(compare)时，编译器就会降序。具体原理不用太了解。</p>
+<p>11.使用list.sort()对自定义类型数据进行排序时，要写10.中的compare函数来指定如何进行排序。</p>
+<p>12.在set容器中要想改变排序规则要怎么办？<br>答：由于set中只有两种排序要么正序，要么倒序。所以要想改变排序规则要在排序之前进行操作。也就是在生成容器对象时：set&lt;int, 某类型&gt;s2.原本可以用函数名来告诉编译器排序规则，但是set要在生成对象前告诉编译器，所以只能在第二个参数内告诉编译器怎么排序。又因为第二个参数是一个类型，所以不能像上面的list一样直接写函数。要写一个仿函数替代。</p>
 </div><div class="tags"></div><div class="article-footer"><a class="excerpt-link" href="/2023/03/10/c-STL/">全文...</a><div class="article-footer__right"><span class="date">写于2023-03-10T08:46:29+08:00</span></div></div></section><section class="article"><a class="title" href="/2023/03/08/c-%E6%A8%A1%E6%9D%BF/">c++ 模板</a><div class="content excerpt"><p>1.template<class T>下面写的函数一定是模板嘛？<br>答：一般情况是的。且调用模板时，一定要给T的类型。</p>
 <p>2.使用什么函数可以查看模板参数列表中参数的类型？<br>答：使用函数typeid(参数).name（）。</p>
 <p>3.父类是类模板时，怎么利用子类定义父类中模板参数类型？<br>答：子类也要被定义为模板，并且参数列表中除了自身要用的模板参数，还要加一个父类的模板参数，并用此指定父类的数据类型。</p>
@@ -38,6 +47,7 @@
 <p>6.如何理解静态成员变量中的“类内声明，类外初始化”？<br>答：声明就是定义个变量的意思，没有赋值操作，在类定义的外面才有初始化也就是赋值的操作。</p>
 <p>7.由于静态成员变量是所有对象共有的所以除了用对象进行访问还可以怎么访问？<br>答：还可以用：“类名：：静态成员变量”，的方式访问。</p>
 <p>8.为什么静态成员函数只能访问静态成员变量？<br>答：因为在类定义中的非静态成员变量不知道是哪个对象调用的。</p>
+<p>9.当函数传递的参数为类的时候，为什么要使用引用？<br>答：使用引用会防止拷贝构造的出现。因为在函数内要生成局部变量，如果不传引用，那么就要创建对象，此时会调用拷贝构造。</p>
 </div><div class="tags"></div><div class="article-footer"><a class="excerpt-link" href="/2023/02/26/C++6/">全文...</a><div class="article-footer__right"><span class="date">写于2023-02-26T09:18:51+08:00</span></div></div></section><section class="article"><a class="title" href="/2023/02/25/C++5/">day 6</a><div class="content excerpt"><p>1.类与结构体的区别？<br>答：比较或者赋值结构体可以直接用两个结构体比较或赋值、而对于类，比较类是否相等需要单独比较其中的成员函数。</p>
 <p>2.vs中如何使用头文件和源文件化简程序？<br>答：参考【黑马程序员匠心之作|C++教程从0到1入门编程】第105节。</p>
 <p>3.默认构造函数（无参构造）调用的时候不要加()，加了会被编译器误以为是函数的声明，不会被编译器认为是创建对象。</p>
