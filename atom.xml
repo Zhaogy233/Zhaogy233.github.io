@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-11T09:58:48.081Z</updated>
+  <updated>2023-03-13T02:07:41.661Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://example.com/2023/03/10/c-STL/"/>
     <id>http://example.com/2023/03/10/c-STL/</id>
     <published>2023-03-10T00:46:29.000Z</published>
-    <updated>2023-03-11T09:58:48.081Z</updated>
+    <updated>2023-03-13T02:07:41.661Z</updated>
     
-    <content type="html"><![CDATA[<p>1.利用vector容器中的swap和匿名对象原理能实现什么？<br>答：能实现内存收缩的操作，创建匿名容器x与另一个实际使用率低的容器v互换即可。vector<T>(v).swap(v).拷贝构造一份v给匿名对象x，再交换。</p><p>2.众所周知在给vector容器赋值的过程中，容器的容量会随着添加的数据而不断变化，那么我们如何确定在向vector容器中添加10万个数据中，系统为vector分配了几次内存呢？<br>答：在添加数据的循环体内加入下面这段话：<br>int num&#x3D;0;<br>int * p &#x3D;NULL;<br>if(p!&#x3D;&amp;v[0])<br>{<br>p&#x3D;&amp;v[0];<br>num++;<br>}<br>这里的v是容器，num就是重新分配内存的次数。</p><p>3.由2.引发出的开辟内存空间次数过多的问题如何解决？<br>答：利用reserve预留空间。v.reserve(100000);</p><p>4.函数传参中如果用const修饰容器，那么使用时要注意什么？<br>答：使用iterator时，需要在前面加const：const_iterator.</p><p>5.deque逻辑上是连续的物理上是离散的，那为什么还支持随机存取？<br>答：本不该支持，但为了更完美就支持了。</p><p>6.利用迭代器对容器进行增删只能在头部和尾部嘛？<br>答：可以自己创建迭代器之后自增到想要删除的位置：deque<int>::iterator it&#x3D;di.begin(); it++;</p><p>7.在使用stl中的算法时要包含#include<algorithm>头文件。对于可以随机存取的迭代器都可以用sort进行直接排序。</p><p>8.栈为什么不能遍历？<br>答：因为遍历是非质变算法，但是想要读取栈内元素需要出栈，这是一种质变算法。</p><p>9.调用函数时怎么分辨全局函数和成员函数？<br>答：对象.函数名()&#x2F;&#x2F;这是成员函数。容器List中的sort函数就是成员函数。<br>函数名()&#x2F;&#x2F;这是全局函数。</p><p>10.list.sort()默认模式为升序，我们如何使用降序呢？<br>答：写个函数 bool compare(int v1,int v2){return v1&gt;v2;}&#x2F;&#x2F;如果v1&gt;v2返回值为真（如果前面的v1大于后面的v2成立），在调用list.sort(compare)时，编译器就会降序。具体原理不用太了解。</p><p>11.使用list.sort()对自定义类型数据进行排序时，要写10.中的compare函数来指定如何进行排序。</p><p>12.在set容器中要想改变排序规则要怎么办？<br>答：由于set中只有两种排序要么正序，要么倒序。所以要想改变排序规则要在排序之前进行操作。也就是在生成容器对象时：set&lt;int, 某类型&gt;s2.原本可以用函数名来告诉编译器排序规则，但是set要在生成对象前告诉编译器，所以只能在第二个参数内告诉编译器怎么排序。又因为第二个参数是一个类型，所以不能像上面的list一样直接写函数。要写一个仿函数替代。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.利用vector容器中的swap和匿名对象原理能实现什么？<br>答：能实现内存收缩的操作，创建匿名容器x与另一个实际使用率低的容器v互换即可。vector<T>(v).swap(v).拷贝构造一份v给匿名对象x，再交换。</p><p>2.众所周知在给vector容器赋值的过程中，容器的容量会随着添加的数据而不断变化，那么我们如何确定在向vector容器中添加10万个数据中，系统为vector分配了几次内存呢？<br>答：在添加数据的循环体内加入下面这段话：<br>int num&#x3D;0;<br>int * p &#x3D;NULL;<br>if(p!&#x3D;&amp;v[0])<br>{<br>p&#x3D;&amp;v[0];<br>num++;<br>}<br>这里的v是容器，num就是重新分配内存的次数。</p><p>3.由2.引发出的开辟内存空间次数过多的问题如何解决？<br>答：利用reserve预留空间。v.reserve(100000);</p><p>4.函数传参中如果用const修饰容器，那么使用时要注意什么？<br>答：使用iterator时，需要在前面加const：const_iterator.</p><p>5.deque逻辑上是连续的物理上是离散的，那为什么还支持随机存取？<br>答：本不该支持，但为了更完美就支持了。</p><p>6.利用迭代器对容器进行增删只能在头部和尾部嘛？<br>答：可以自己创建迭代器之后自增到想要删除的位置：deque<int>::iterator it&#x3D;di.begin(); it++;</p><p>7.在使用stl中的算法时要包含#include<algorithm>头文件。对于可以随机存取的迭代器都可以用sort进行直接排序。</p><p>8.栈为什么不能遍历？<br>答：因为遍历是非质变算法，但是想要读取栈内元素需要出栈，这是一种质变算法。</p><p>9.调用函数时怎么分辨全局函数和成员函数？<br>答：对象.函数名()&#x2F;&#x2F;这是成员函数。容器List中的sort函数就是成员函数。<br>函数名()&#x2F;&#x2F;这是全局函数。</p><p>10.list.sort()默认模式为升序，我们如何使用降序呢？<br>答：写个函数 bool compare(int v1,int v2){return v1&gt;v2;}&#x2F;&#x2F;如果v1&gt;v2返回值为真（如果前面的v1大于后面的v2成立），在调用list.sort(compare)时，编译器就会降序。具体原理不用太了解。compare函数也称为回调函数。</p><p>11.使用list.sort()对自定义类型数据进行排序时，要写10.中的compare函数来指定如何进行排序。</p><p>12.在set容器中要想改变排序规则要怎么办？<br>答：由于set中只有两种排序要么正序，要么倒序。所以要想改变排序规则要在排序之前进行操作。也就是在生成容器对象时：set&lt;int, 某类型&gt;s2.原本可以用函数名来告诉编译器排序规则，但是set要在生成对象前告诉编译器，所以只能在第二个参数内告诉编译器怎么排序。又因为第二个参数是一个类型，所以不能像上面的list一样直接写函数。要写一个仿函数替代。</p>]]></content>
     
     
       
