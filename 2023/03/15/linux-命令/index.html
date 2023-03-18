@@ -9,9 +9,10 @@
 </ol>
 <p>5.umask是干什么的？<br>答：它为touch的新文件提供掩码，该掩码作用于文件属性rwx，但是os默认新建文件没有执行能力，故没有x，所以rwx+111+掩码&#x3D;777,但可以自定义掩码：umask 511.只要新文件仍然没有可执行能力就可以。</p>
 <p>6.Ctrl+alt+t：创建新终端，可以一边看代码，一边调试。<br>Ctrl+shift+t：另起一页终端，用alt1、2、3、4进行切换。</p>
-<p>7.-n显示行号</p>
+<p>7.-n显示行号，或者再makefile中意味着模拟执行。</p>
 <p>8.ldd a.out是什么意思？<br>答：查看a.out所需要的动态库的路径。</p>
 <p>9.链接器与动态链接器的区别？<br>答：链接器用来合并数据段与地址回填。而动态链接器用来加载动态库。</p>
+<p>10.-rm -rf为什么rm前加-？<br>答：在rm前加-代表出错误依旧执行的意思。</p>
 </div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/03/18/makefile/">makefile</a></li><li>下一篇：<a href="/2023/03/10/c-STL/">c++ STL</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
 

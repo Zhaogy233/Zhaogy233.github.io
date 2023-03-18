@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-18T02:20:02.410Z</updated>
+  <updated>2023-03-18T06:43:00.840Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>shell</title>
+    <link href="http://example.com/2023/03/18/shell/"/>
+    <id>http://example.com/2023/03/18/shell/</id>
+    <published>2023-03-18T06:41:48.000Z</published>
+    <updated>2023-03-18T06:43:00.840Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.src&#x3D;$()是什么意思？<br>答：将括号内执行结果赋值给变量src。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.src&amp;#x3D;$()是什么意思？&lt;br&gt;答：将括号内执行结果赋值给变量src。&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>makefile</title>
     <link href="http://example.com/2023/03/18/makefile/"/>
     <id>http://example.com/2023/03/18/makefile/</id>
     <published>2023-03-18T01:49:09.000Z</published>
-    <updated>2023-03-18T02:20:02.410Z</updated>
+    <updated>2023-03-18T07:53:26.127Z</updated>
     
-    <content type="html"><![CDATA[<p>1在linux环境下如何以最简单的方式实现vs中简化代码的操作(头文件与源文件分开写)?<br>答：用多文件连编:g++ text.c add.c sub.c div1.c -o a.out。</p><p>2.上述实现方式有什么问题？怎么解决？<br>答：当其中一个文件改变时，却需要所有文件跟着一起编译，这样非常耗时。应该各自编译各自的生成.o文件，最后再链接到一起，由此引出makefile。</p><p>3.makefile三个重点：一个规则；两个函数；三个自动变量。</p>]]></content>
+    <content type="html"><![CDATA[<p>1在linux环境下如何以最简单的方式实现vs中简化代码的操作(头文件与源文件分开写)?<br>答：用多文件连编:g++ text.c add.c sub.c div1.c -o a.out。</p><p>2.上述实现方式有什么问题？怎么解决？<br>答：当其中一个文件改变时，却需要所有文件跟着一起编译，这样非常耗时。应该各自编译各自的生成.o文件，最后再链接到一起，由此引出makefile。</p><p>3.makefile三个重点：一个规则；两个函数；三个自动变量。</p><p>4.创建头文件<br>#ifndef <em>HEAD_H</em><br>#define <em>HEAD_H</em><br>所包含的头文件<br>#endif</p>]]></content>
     
     
       
@@ -42,9 +63,9 @@
     <link href="http://example.com/2023/03/15/linux-%E5%91%BD%E4%BB%A4/"/>
     <id>http://example.com/2023/03/15/linux-%E5%91%BD%E4%BB%A4/</id>
     <published>2023-03-15T01:46:52.000Z</published>
-    <updated>2023-03-17T01:15:17.913Z</updated>
+    <updated>2023-03-18T06:40:06.988Z</updated>
     
-    <content type="html"><![CDATA[<ol><li>-a 与 -r有什么区别？<br>答：-a是以全部的方式(cp)或显示隐藏文件(ls)，-r是以递归的方式。例如在cp拷贝的过程中：使用-a会把原来的时间也拷贝过来，但用-r就会以拷贝的时间作为新文件最后使用的时间。</li></ol><p>2.hello.*是什么意思？<br>答：是以hello.为前缀的所有文件。eg：hello.cpp,  hello.c,  hello.java</p><p>3.cat的用法？<br>答：一：显示文件内容。二：单写cat可以实现你写一行命令，系统复制一遍再输出的操作，也称作回显。三：可以用tac倒着输出文件内容。</p><ol start="4"><li>-atime   按照访问时间attand<br> -mtime 按照修改属性时间modify<br> -ctime   按照修改文件时间change</li></ol><p>5.umask是干什么的？<br>答：它为touch的新文件提供掩码，该掩码作用于文件属性rwx，但是os默认新建文件没有执行能力，故没有x，所以rwx+111+掩码&#x3D;777,但可以自定义掩码：umask 511.只要新文件仍然没有可执行能力就可以。</p><p>6.Ctrl+alt+t：创建新终端，可以一边看代码，一边调试。<br>Ctrl+shift+t：另起一页终端，用alt1、2、3、4进行切换。</p><p>7.-n显示行号</p><p>8.ldd a.out是什么意思？<br>答：查看a.out所需要的动态库的路径。</p><p>9.链接器与动态链接器的区别？<br>答：链接器用来合并数据段与地址回填。而动态链接器用来加载动态库。</p>]]></content>
+    <content type="html"><![CDATA[<ol><li>-a 与 -r有什么区别？<br>答：-a是以全部的方式(cp)或显示隐藏文件(ls)，-r是以递归的方式。例如在cp拷贝的过程中：使用-a会把原来的时间也拷贝过来，但用-r就会以拷贝的时间作为新文件最后使用的时间。</li></ol><p>2.hello.*是什么意思？<br>答：是以hello.为前缀的所有文件。eg：hello.cpp,  hello.c,  hello.java</p><p>3.cat的用法？<br>答：一：显示文件内容。二：单写cat可以实现你写一行命令，系统复制一遍再输出的操作，也称作回显。三：可以用tac倒着输出文件内容。</p><ol start="4"><li>-atime   按照访问时间attand<br> -mtime 按照修改属性时间modify<br> -ctime   按照修改文件时间change</li></ol><p>5.umask是干什么的？<br>答：它为touch的新文件提供掩码，该掩码作用于文件属性rwx，但是os默认新建文件没有执行能力，故没有x，所以rwx+111+掩码&#x3D;777,但可以自定义掩码：umask 511.只要新文件仍然没有可执行能力就可以。</p><p>6.Ctrl+alt+t：创建新终端，可以一边看代码，一边调试。<br>Ctrl+shift+t：另起一页终端，用alt1、2、3、4进行切换。</p><p>7.-n显示行号，或者再makefile中意味着模拟执行。</p><p>8.ldd a.out是什么意思？<br>答：查看a.out所需要的动态库的路径。</p><p>9.链接器与动态链接器的区别？<br>答：链接器用来合并数据段与地址回填。而动态链接器用来加载动态库。</p><p>10.-rm -rf为什么rm前加-？<br>答：在rm前加-代表出错误依旧执行的意思。</p>]]></content>
     
     
       
@@ -150,9 +171,9 @@
     <link href="http://example.com/2023/02/28/Linux-1/"/>
     <id>http://example.com/2023/02/28/Linux-1/</id>
     <published>2023-02-28T09:02:20.000Z</published>
-    <updated>2023-02-28T09:41:05.729Z</updated>
+    <updated>2023-03-18T09:19:36.156Z</updated>
     
-    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p><p>3.errno可以想象为os定义的全局变量可直接当整型使用。但要引用头文件，errno.h。之后用strerror(errno)返回string类型可以用%s打印，strerror的头文件是string.h。</p>]]></content>
     
     
       
