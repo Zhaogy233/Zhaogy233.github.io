@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="description" content=""><meta name="keyword"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>linux 命令</title><link rel="shortcut icon" href="/images/avatar.png" type="image/x-icon"><link href="/styles/site.css" rel="stylesheet"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
 </head><body><header class="container" id="header"><div class="header"><div class="header-left"><div class="avatar"><img src="/images/avatar.png"></div><div class="author"><div class="author-name"><a href="/">Zhaogy233</a></div><div class="about-me">Hi~</div></div></div><div class="header-right"><ul class="navigation"><li><a href="/archives">归档</a></li></ul></div><div class="about-me-mask"><div class="about-me-wrap"><div class="about-me__header"><div class="avatar"><img src="/images/avatar.png"></div></div><ul class="socials"><li class="social-item"><span class="label"><img src="/images/socials/github.svg" alt="https://github.com/Zhaogy233"></span><a href="https://github.com/Zhaogy233" target="_blank" title="https://github.com/Zhaogy233">https://github.com/Zhaogy233</a></li><li class="social-item"><span class="label"><img src="/images/socials/email.svg" alt="3468482206@qq.com"></span><span>3468482206@qq.com</span></li><li class="social-item"><span class="label"><img src="/images/socials/wechat.svg" alt="z15566143013"></span><span>z15566143013</span></li></ul></div></div></div></header><div class="container post"><section class="article"><div class="title">linux 命令</div><div class="date">写于2023-03-15T09:46:52+08:00</div><div class="content"><ol>
-<li>-a 与 -r有什么区别？<br>答：-a是以全部的方式，-r是以递归的方式。例如在cp拷贝的过程中：使用-a会把原来的时间也拷贝过来，但用-r就会以拷贝的时间作为新文件最后使用的时间。</li>
+<li>-a 与 -r有什么区别？<br>答：-a是以全部的方式(cp)或显示隐藏文件(ls)，-r是以递归的方式。例如在cp拷贝的过程中：使用-a会把原来的时间也拷贝过来，但用-r就会以拷贝的时间作为新文件最后使用的时间。</li>
 </ol>
 <p>2.hello.*是什么意思？<br>答：是以hello.为前缀的所有文件。eg：hello.cpp,  hello.c,  hello.java</p>
 <p>3.cat的用法？<br>答：一：显示文件内容。二：单写cat可以实现你写一行命令，系统复制一遍再输出的操作，也称作回显。三：可以用tac倒着输出文件内容。</p>
@@ -10,7 +10,9 @@
 <p>5.umask是干什么的？<br>答：它为touch的新文件提供掩码，该掩码作用于文件属性rwx，但是os默认新建文件没有执行能力，故没有x，所以rwx+111+掩码&#x3D;777,但可以自定义掩码：umask 511.只要新文件仍然没有可执行能力就可以。</p>
 <p>6.Ctrl+alt+t：创建新终端，可以一边看代码，一边调试。<br>Ctrl+shift+t：另起一页终端，用alt1、2、3、4进行切换。</p>
 <p>7.-n显示行号</p>
-</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>下一篇：<a href="/2023/03/10/c-STL/">c++ STL</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+<p>8.ldd a.out是什么意思？<br>答：查看a.out所需要的动态库的路径。</p>
+<p>9.链接器与动态链接器的区别？<br>答：链接器用来合并数据段与地址回填。而动态链接器用来加载动态库。</p>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/03/18/makefile/">makefile</a></li><li>下一篇：<a href="/2023/03/10/c-STL/">c++ STL</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
