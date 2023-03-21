@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-18T06:43:00.840Z</updated>
+  <updated>2023-03-21T08:05:40.941Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux I/O</title>
+    <link href="http://example.com/2023/03/20/Linux-I-O/"/>
+    <id>http://example.com/2023/03/20/Linux-I-O/</id>
+    <published>2023-03-20T00:28:38.000Z</published>
+    <updated>2023-03-21T08:05:40.941Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.fprintf是向文件中输入数据，用第一个参数指定哪个文件。但是第一个参数可以是stderr，stderr叫做标准出错固定向屏幕输出，不需要换行操作，执行文件就输出。除了第一个参数外，后两个参数与printf一样。</p><p>2.perror()是自动关联全局变量errno报错的函数，他俩一起包含在头文件&lt;errno.h&gt;中，perror里只需传入一串字符，可以是任意字符，就能完成报错任务。</p><p>3.static定义的静态变量在全局区，但一个变量名只被能定义一次。</p><p>4.ulimit -a查看一个进程中最多打开文件数目1024。</p><p>5.linux的有一种神奇的参数叫命令行参数。意思是在a.out执行的命令行后面可以加入参数传给main函数。参数是main函数的参数。<br>int main(int argc,char * argv[]){}<br>int main(int argc,char** argv){}<br>第一个参数是自动识别命令行中输入多少数据，第二个参数维护一个数组，数组中存放着从命令行输入的数据(可以是数字也可以是字符)，数组中第零号位置存放的是文件的名称。</p><p>6.在使用fclose函数的时候先关闭依赖别人的文件，再关闭被依赖的文件。</p><p>7.连续写两个fopen函数时的注意事项！<br>答：当第一个文件打开成功，但是第二个文件打开失败时，程序就会终止运行，此时已经出现内存泄漏，因为两个连续的fopen函数调用的存在，而无法关闭第一个fopen打开的文件。此时应该再第二个fopen函数打开失败的if语句里提供关闭第一个文件的close函数。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.fprintf是向文件中输入数据，用第一个参数指定哪个文件。但是第一个参数可以是stderr，stderr叫做标准出错固定向屏幕输出，不需要换行操作，执行文件就输出。除了第一个参数外，后两个参数与printf一样。&lt;/p&gt;
+&lt;p&gt;2.perror()是自动关联全局变量e</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>shell</title>
@@ -171,9 +192,9 @@
     <link href="http://example.com/2023/02/28/Linux-1/"/>
     <id>http://example.com/2023/02/28/Linux-1/</id>
     <published>2023-02-28T09:02:20.000Z</published>
-    <updated>2023-03-18T09:19:36.156Z</updated>
+    <updated>2023-03-19T01:31:18.083Z</updated>
     
-    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p><p>3.errno可以想象为os定义的全局变量可直接当整型使用。但要引用头文件，errno.h。之后用strerror(errno)返回string类型可以用%s打印，strerror的头文件是string.h。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p><p>3.errno可以想象为os定义的全局变量可直接当整型使用。但要引用头文件，errno.h。之后用strerror(errno)返回string类型可以用%s打印，strerror的头文件是string.h。</p><p>4.*与%都是通配符，但是%有锁定的意味。</p>]]></content>
     
     
       
