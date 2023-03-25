@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-23T10:23:35.381Z</updated>
+  <updated>2023-03-25T07:55:02.658Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux 文件系統</title>
+    <link href="http://example.com/2023/03/25/Linux-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%B5%B1/"/>
+    <id>http://example.com/2023/03/25/Linux-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%B5%B1/</id>
+    <published>2023-03-25T00:46:17.000Z</published>
+    <updated>2023-03-25T07:55:02.658Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li>&#x2F;etc&#x2F;passed下面记录了各个用户的信息，有用户id<br>&#x2F;tec&#x2F;group记录用户组信息</li></ol><p>2.如何查看文件具体信息？<br>答：stat命令与fstat,lstat函数，stat命令由stat函数封装。另外使用vim -t命令可以查看类型属性，前提是安装ctags。<br>stat:通过文件路径获取文件属性，面对符号链接文件时获取的是源文件而不是快捷方式。<br>fstat:通过文件描述符获取文件属性。<br>lstat:面对符号链接文件时获取的是快捷方式。<br>例题：利用stat函数写一个flen.c函数实现读取文件大小的功能：要利用一个也叫做stat的结构体，声明结构体前要加struct不然不识别，结构体变量中指定size的是off_t类型属于long型，用static写在函数返回值之前的作用是禁止函数的外部扩展。</p><p>3.在stat的属性中blksize指的是块大小，一般为512字节，blocks指的是块数，二者之积为文件在磁盘上的实际大小。而size只是个属性。</p><p>4.什么是空洞文件，如何创建？<br>答：使用lseek函数创建的文件</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;ol&gt;
+&lt;li&gt;&amp;#x2F;etc&amp;#x2F;passed下面记录了各个用户的信息，有用户id&lt;br&gt;&amp;#x2F;tec&amp;#x2F;group记录用户组信息&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;2.如何查看文件具体信息？&lt;br&gt;答：stat命令与fstat,lstat函数，stat命令</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Linux IO总结</title>
@@ -83,9 +106,9 @@
     <link href="http://example.com/2023/03/18/makefile/"/>
     <id>http://example.com/2023/03/18/makefile/</id>
     <published>2023-03-18T01:49:09.000Z</published>
-    <updated>2023-03-18T07:53:26.127Z</updated>
+    <updated>2023-03-25T05:57:01.422Z</updated>
     
-    <content type="html"><![CDATA[<p>1在linux环境下如何以最简单的方式实现vs中简化代码的操作(头文件与源文件分开写)?<br>答：用多文件连编:g++ text.c add.c sub.c div1.c -o a.out。</p><p>2.上述实现方式有什么问题？怎么解决？<br>答：当其中一个文件改变时，却需要所有文件跟着一起编译，这样非常耗时。应该各自编译各自的生成.o文件，最后再链接到一起，由此引出makefile。</p><p>3.makefile三个重点：一个规则；两个函数；三个自动变量。</p><p>4.创建头文件<br>#ifndef <em>HEAD_H</em><br>#define <em>HEAD_H</em><br>所包含的头文件<br>#endif</p>]]></content>
+    <content type="html"><![CDATA[<p>1在linux环境下如何以最简单的方式实现vs中简化代码的操作(头文件与源文件分开写)?<br>答：用多文件连编:g++ text.c add.c sub.c div1.c -o a.out。</p><p>2.上述实现方式有什么问题？怎么解决？<br>答：当其中一个文件改变时，却需要所有文件跟着一起编译，这样非常耗时。应该各自编译各自的生成.o文件，最后再链接到一起，由此引出makefile工程管理器。</p><p>3.makefile三个重点：一个规则；两个函数；三个自动变量。</p><p>4.创建头文件<br>#ifndef <em>HEAD_H</em><br>#define <em>HEAD_H</em><br>所包含的头文件<br>#endif</p><p>5.在大小写makefile都存在的时候，调用make优先调用小写的makefile</p>]]></content>
     
     
       
