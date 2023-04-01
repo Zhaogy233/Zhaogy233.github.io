@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="description" content=""><meta name="keyword"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Linux 进程</title><link rel="shortcut icon" href="/images/avatar.png" type="image/x-icon"><link href="/styles/site.css" rel="stylesheet"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head><body><header class="container" id="header"><div class="header"><div class="header-left"><div class="avatar"><img src="/images/avatar.png"></div><div class="author"><div class="author-name"><a href="/">Zhaogy233</a></div><div class="about-me">Hi~</div></div></div><div class="header-right"><ul class="navigation"><li><a href="/archives">归档</a></li></ul></div><div class="about-me-mask"><div class="about-me-wrap"><div class="about-me__header"><div class="avatar"><img src="/images/avatar.png"></div></div><ul class="socials"><li class="social-item"><span class="label"><img src="/images/socials/github.svg" alt="https://github.com/Zhaogy233"></span><a href="https://github.com/Zhaogy233" target="_blank" title="https://github.com/Zhaogy233">https://github.com/Zhaogy233</a></li><li class="social-item"><span class="label"><img src="/images/socials/email.svg" alt="3468482206@qq.com"></span><span>3468482206@qq.com</span></li><li class="social-item"><span class="label"><img src="/images/socials/wechat.svg" alt="z15566143013"></span><span>z15566143013</span></li></ul></div></div></div></header><div class="container post"><section class="article"><div class="title">Linux 进程</div><div class="date">写于2023-03-30T14:07:34+08:00</div><div class="content"><p>1.进程标识符 pid，它的类型位pid_t为16位有符号整型数，但只能用非负的，由于每个系统不同，所以位数不同，比较保险的情况是转换为longlong类型输出。<br>用ps命令查看进程 axf  ，axm ， ax -L<br>进程号是顺次向下使用1-&gt;2-&gt;3,2释放了2,下次使用时使用4<br>getpid(),不用传参，哪个进程在使用返回值就是哪个继承的pid<br>getppid()</p>
+<p>2.进程的产生<br>the calling process 是当前进程的意思<br>fork(),也是执行一次返回两次的函数，当父进程调用fork函数的时候，会创建一个子进程，其内容与父进程一模一样，连执行的位置都一样，除了一些不一样。<br>fork后父子进程的区别：fork的返回值不一样，pid不同，ppid也不同，未决信号和文件锁不继承，资源利用量归零<br>init进程：是一号进程，是所有进程的祖先进程，而不一定时父进程，当用ps axf查看时，如果最右侧的串是顶格写的，那么它的父进程是init<br>写个小程序fork1.c练习<br>调度器的调度策略来决定哪个进程先运行，不要凭空猜测父子进程谁新运行。<br>fflush()的重要性。</p>
+<p>3.time命令给出的time信息不属于标准输出，无法重定向</p>
+<p>4.写一个程序primer1.c实现201个子进程来查找30000000-30000200中的质数。</p>
+<p>5.连续两次使用ps -axf结果为什么一样？<br>答：因为没有用kill杀死上一个进程。</p>
+<p>6.谁创建谁释放，如果父进程创建子进程，那么子进程结束后会变为僵尸态，等父进程收尸，如果父进程不收尸直接结束，那么子进程会编程孤儿态，由init进程接管。</p>
+<p>7.当父进程数据量过大，但又想创建子进程实现简单功能，此时直接fork会很浪费，那怎么办？<br>答：可以用vfork。以前的fork创建的子进程会完全拷贝父进程数据并创建一份新的空间给自己用，所以出现vfork使创建的子进程与父进程的位置不同，但指针指向的数据块位置相同，这样可以让子进程完成简单的操作，但也只能用这些函数(exec函数族)，所以后来给fork增加了写时拷贝的功能 ，fork做了改进，创建的子进程与父进程指向同一数据块，父与子无论谁想写改数据都可以，谁想改谁就复制一份，之后一直指向复制的那一份。</p>
+<p>absolute value是绝对值的意思</p>
+<p>8.进程的消亡及释放资源(收尸)<br>wait(int * status)，wait的意思使等待进程状态改变，再man手册看到时，可以翻译为收尸。该函数用来收尸，并获得被收尸的子进程信息，放在&amp;status里.详情见primer2.c<br>waitpid()<br>waitid()<br>wait3()<br>wait4()</p>
+<p>9.并发的三种算法<br>分块，交叉分配，池<br>池：上游不断向容器中分配任务，下游好几个进程线程抢任务。<br>eg：用交叉分配法算质数primern.c</p>
+<p>10.exec函数族:用一个全新的进程映像替换目前进程映像，全新的进程是谁，干什么都用exec函数族中的函数实现，但是pid不变<br>execl()，第二个参数相当于argv[0],第三个参数相当于argv[1].<br>execlp()<br>execle()<br>execv()<br>execvp()<br>eg：ex.c<br>char * 对应的东西应该写在””内<br>注意：要在exec前调用fflush，因为exec创建新的进程映像，如果不fflush，原程序调用到exec就被没有了，包括缓冲区的内容，直接生成新进程。</p>
+<p>11.few(fork,exec,wait)搭建了整个unix世界<br>eg:few.c，这就解释了为什么shell创建的子进程是自己定义的而不是另一个shell。</p>
+<p>12.一个命令的二进制可执行文件存放在磁盘上，这个命令叫外部命令，其余都叫内部命令(比如目录管理，进程消亡怎么处理，调度等)。</p>
+<p>13.实现shell的外部命令处理：myshell.c</p>
+<p>14.用户权限和组权限,鉴定权限的时候用的是effective id<br>u+s&#x2F;g+s<br>无u+s&#x2F;g+s用ls显示的权限是rwx，当给一个用户添加u+s权限后，他的权限会变成rws，意味着当别的用户调用当前可执行文件的时候，他的身份会切换位当前这个二进制文件的user身份来执行，这个切换的过程都是由exec函数识别和完成的。<br>getuid(),geteuid()<br>getgid(),getegid()<br>setuid(),setgid()<br>setreuid(),setregid()原子化交换<br>seteuid(),setegid()<br>eg:mysu<br>写完程序正常执行.&#x2F;mysu 0 cat &#x2F;etc&#x2F;shadow肯定不能执行，这就要用到u+s了，用su切换为root把文件所有者user改为root，把文件权限改为u+s，之后再执行就会成功。<br>0代表root用户</p>
+<p>15.命令解释器<br>脚本的第一句话：#! &#x2F;bin&#x2F;bash  ，其中#!为脚本标志，他后面的是命令解释器或可执行文件，该解释器或可执行文件会解释这个脚本文件所有命令。<br>eg:cmdit</p>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>下一篇：<a href="/2023/03/29/Linux-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/">Linux 进程环境</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+<script src="/script/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<script src="/script/index.js"></script>
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-61220413-1', 'auto');
+ga('send', 'pageview');</script>
+<script src="/script/post.js"></script>
+</body></html>

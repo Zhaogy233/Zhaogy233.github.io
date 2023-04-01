@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-29T08:16:13.579Z</updated>
+  <updated>2023-04-01T03:19:56.406Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,33 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux 进程</title>
+    <link href="http://example.com/2023/03/30/Linux-%E8%BF%9B%E7%A8%8B/"/>
+    <id>http://example.com/2023/03/30/Linux-%E8%BF%9B%E7%A8%8B/</id>
+    <published>2023-03-30T06:07:34.000Z</published>
+    <updated>2023-04-01T03:19:56.406Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.进程标识符 pid，它的类型位pid_t为16位有符号整型数，但只能用非负的，由于每个系统不同，所以位数不同，比较保险的情况是转换为longlong类型输出。<br>用ps命令查看进程 axf  ，axm ， ax -L<br>进程号是顺次向下使用1-&gt;2-&gt;3,2释放了2,下次使用时使用4<br>getpid(),不用传参，哪个进程在使用返回值就是哪个继承的pid<br>getppid()</p><p>2.进程的产生<br>the calling process 是当前进程的意思<br>fork(),也是执行一次返回两次的函数，当父进程调用fork函数的时候，会创建一个子进程，其内容与父进程一模一样，连执行的位置都一样，除了一些不一样。<br>fork后父子进程的区别：fork的返回值不一样，pid不同，ppid也不同，未决信号和文件锁不继承，资源利用量归零<br>init进程：是一号进程，是所有进程的祖先进程，而不一定时父进程，当用ps axf查看时，如果最右侧的串是顶格写的，那么它的父进程是init<br>写个小程序fork1.c练习<br>调度器的调度策略来决定哪个进程先运行，不要凭空猜测父子进程谁新运行。<br>fflush()的重要性。</p><p>3.time命令给出的time信息不属于标准输出，无法重定向</p><p>4.写一个程序primer1.c实现201个子进程来查找30000000-30000200中的质数。</p><p>5.连续两次使用ps -axf结果为什么一样？<br>答：因为没有用kill杀死上一个进程。</p><p>6.谁创建谁释放，如果父进程创建子进程，那么子进程结束后会变为僵尸态，等父进程收尸，如果父进程不收尸直接结束，那么子进程会编程孤儿态，由init进程接管。</p><p>7.当父进程数据量过大，但又想创建子进程实现简单功能，此时直接fork会很浪费，那怎么办？<br>答：可以用vfork。以前的fork创建的子进程会完全拷贝父进程数据并创建一份新的空间给自己用，所以出现vfork使创建的子进程与父进程的位置不同，但指针指向的数据块位置相同，这样可以让子进程完成简单的操作，但也只能用这些函数(exec函数族)，所以后来给fork增加了写时拷贝的功能 ，fork做了改进，创建的子进程与父进程指向同一数据块，父与子无论谁想写改数据都可以，谁想改谁就复制一份，之后一直指向复制的那一份。</p><p>absolute value是绝对值的意思</p><p>8.进程的消亡及释放资源(收尸)<br>wait(int * status)，wait的意思使等待进程状态改变，再man手册看到时，可以翻译为收尸。该函数用来收尸，并获得被收尸的子进程信息，放在&amp;status里.详情见primer2.c<br>waitpid()<br>waitid()<br>wait3()<br>wait4()</p><p>9.并发的三种算法<br>分块，交叉分配，池<br>池：上游不断向容器中分配任务，下游好几个进程线程抢任务。<br>eg：用交叉分配法算质数primern.c</p><p>10.exec函数族:用一个全新的进程映像替换目前进程映像，全新的进程是谁，干什么都用exec函数族中的函数实现，但是pid不变<br>execl()，第二个参数相当于argv[0],第三个参数相当于argv[1].<br>execlp()<br>execle()<br>execv()<br>execvp()<br>eg：ex.c<br>char * 对应的东西应该写在””内<br>注意：要在exec前调用fflush，因为exec创建新的进程映像，如果不fflush，原程序调用到exec就被没有了，包括缓冲区的内容，直接生成新进程。</p><p>11.few(fork,exec,wait)搭建了整个unix世界<br>eg:few.c，这就解释了为什么shell创建的子进程是自己定义的而不是另一个shell。</p><p>12.一个命令的二进制可执行文件存放在磁盘上，这个命令叫外部命令，其余都叫内部命令(比如目录管理，进程消亡怎么处理，调度等)。</p><p>13.实现shell的外部命令处理：myshell.c</p><p>14.用户权限和组权限,鉴定权限的时候用的是effective id<br>u+s&#x2F;g+s<br>无u+s&#x2F;g+s用ls显示的权限是rwx，当给一个用户添加u+s权限后，他的权限会变成rws，意味着当别的用户调用当前可执行文件的时候，他的身份会切换位当前这个二进制文件的user身份来执行，这个切换的过程都是由exec函数识别和完成的。<br>getuid(),geteuid()<br>getgid(),getegid()<br>setuid(),setgid()<br>setreuid(),setregid()原子化交换<br>seteuid(),setegid()<br>eg:mysu<br>写完程序正常执行.&#x2F;mysu 0 cat &#x2F;etc&#x2F;shadow肯定不能执行，这就要用到u+s了，用su切换为root把文件所有者user改为root，把文件权限改为u+s，之后再执行就会成功。<br>0代表root用户</p><p>15.命令解释器<br>脚本的第一句话：#! &#x2F;bin&#x2F;bash  ，其中#!为脚本标志，他后面的是命令解释器或可执行文件，该解释器或可执行文件会解释这个脚本文件所有命令。<br>eg:cmdit</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.进程标识符 pid，它的类型位pid_t为16位有符号整型数，但只能用非负的，由于每个系统不同，所以位数不同，比较保险的情况是转换为longlong类型输出。&lt;br&gt;用ps命令查看进程 axf  ，axm ， ax -L&lt;br&gt;进程号是顺次向下使用1-&amp;gt;2-&amp;gt</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Linux 进程环境</title>
     <link href="http://example.com/2023/03/29/Linux-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/"/>
     <id>http://example.com/2023/03/29/Linux-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/</id>
     <published>2023-03-29T03:49:19.000Z</published>
-    <updated>2023-03-29T08:16:13.579Z</updated>
+    <updated>2023-03-30T06:25:42.857Z</updated>
     
-    <content type="html"><![CDATA[<p>1.进程的终止有几种情况？分别是什么？<br>正常的终止<br>    从main函数返回<br>    调用exit<br>    调用_exit或_Exit<br>    最后一个线程从其启动例程返回<br>    最后一个线程调用pthread_exit</p><p>异常终止<br>    调用abort<br>    接到一个信号并终止<br>    最后一个线程对其取消请求做出相应</p><p>2.main函数返回值给谁看的？<br>答：给父进程看的，在linux环境下一般程序的父进程时shell，可以用echo $?打印上一个可执行程序的返回值。</p><p>3.什么是钩子函数？<br>atexti()函数是钩子函数，类似c++中的析构函数，用来挂载要释放的空间或关闭文件，调用exit时会逆序调用所有函数。<br>但是调用_exit()时会直接终止程序，不调用钩子函数也不执行IO清理，一般在程序出错的时候，比如写越界的时候调用_exit()，为了即时终止程序，防止问题扩大，也可以调用abort()阻止污染扩散。<br>写一个函数atexit.c解释钩子函数。atexit函数要自己定义，在man手册中把atexit换成自己要写的函数名即可，函数内容也是自己写。，但是在调用的时候要用atexit(自定义函数的函数名)</p><p>4.命令行参数解析<br>getopt(),该函数的第三个参数opstring是命令行选项的意思但是不带-;<br>getopt_long();<br>用这俩函数写一个mydate.c可以用-y:year,-m:month,-d:day,-H:hour,-M:minute,-S:second，显示想要的信息<br>当getopt函数的第三个参数后面！加冒号的时候，说明该选项可以附加条件，命令行传参是该参数后面的串默认传入char * optarg(这个变量是全局变量，已经定义好的)中，这个附加条件是给程序员看的，程序员根据这个附加条件去写相应的功能<br>man手册中用extern定义的变量都是全局变量<br>在optstring中如果不加-,函数不认识非选项传参(路径，名称等)，加-后可以识别，且返回值为1。非选项参数的位置是optind-1.</p>]]></content>
+    <content type="html"><![CDATA[<p>1.进程的终止有几种情况？分别是什么？<br>正常的终止<br>    从main函数返回<br>    调用exit<br>    调用_exit或_Exit<br>    最后一个线程从其启动例程返回<br>    最后一个线程调用pthread_exit</p><p>异常终止<br>    调用abort<br>    接到一个信号并终止<br>    最后一个线程对其取消请求做出相应</p><p>2.main函数返回值给谁看的？<br>答：给父进程看的，在linux环境下一般程序的父进程时shell，可以用echo $?打印上一个可执行程序的返回值。</p><p>3.什么是钩子函数？<br>atexti()函数是钩子函数，类似c++中的析构函数，用来挂载要释放的空间或关闭文件，调用exit时会逆序调用所有函数。<br>但是调用_exit()时会直接终止程序，不调用钩子函数也不执行IO清理，一般在程序出错的时候，比如写越界的时候调用_exit()，为了即时终止程序，防止问题扩大，也可以调用abort()阻止污染扩散。<br>写一个函数atexit.c解释钩子函数。atexit函数要自己定义，在man手册中把atexit换成自己要写的函数名即可，函数内容也是自己写。，但是在调用的时候要用atexit(自定义函数的函数名)</p><p>4.命令行参数解析<br>getopt(),该函数的第三个参数opstring是命令行选项的意思但是不带-;<br>getopt_long();<br>用这俩函数写一个mydate.c可以用-y:year,-m:month,-d:day,-H:hour,-M:minute,-S:second，显示想要的信息<br>当getopt函数的第三个参数后面！加冒号的时候，说明该选项可以附加条件，命令行传参是该参数后面的串默认传入char * optarg(这个变量是全局变量，已经定义好的)中，这个附加条件是给程序员看的，程序员根据这个附加条件去写相应的功能<br>man手册中用extern定义的变量都是全局变量<br>在optstring中如果不加-,函数不认识非选项传参(路径，名称等)，加-后可以识别，且返回值为1。非选项参数的位置是optind-1.</p><p>5.用export来查看环境变量，一个目录下的环境变量被更改不影响其他目录，环境变量的格式是key&#x3D;value，value的值改变，命令行也会发生改变。</p><p>6.bin表示的是二进制文件，所有的二进制文件会在环境变量的path路径中。</p><p>7.environ是char**类型与argv一样，里面存放着所有的环境变量，与argv不同的是environ没有像argc一样的计数器，故在写循环的时候要把循环推出条件写为environ[i]!&#x3D;NULL; 用extern char ** environ;声明。<br>getenv(),向你要关键字，返回一个value值。<br>setenv(),如果key存在就改变，如果key不存在就添加,overwrite为真就覆盖，否则不覆盖。</p><p>8.命令ps axf查看当前进程关系，可得到进程号，命令 pmap + 进程号，看内存空间分布情况。</p><p>9.man手册中小心link with，这句话意味着你在链接的时候要加上某项。</p><p>10.在打开方式的参数中，有_lazy懒惰方式，意思是用的时候在打开。</p><p>11.如何理解 man手册中的double (*cosine) (double)？<br>答：(*cosine)意味着cosine是指向函数的指针，函数参数和返回值都是double</p><p>12.如何理解*(void ** )( &amp;cosine)?<br>答：cosine是函数指针，取地址变为二级指针，强转为void*<em>，后解引用为void</em></p><p>13.函数跳转，随着main函数的调用不断有函数压栈，当到达目标栈时，得到数据后想要直接回到初始状态，而非一层层弹栈的话，需要以下函数比goto安全。<br>setjmp()，设置跳转点，如果正在设置跳转点，返回值为0，如果从longjmp返回，那么返回值非0，参数位全局变量，该函数是执行一次返回两次的函数。<br>longjmp()，从哪个位置跳回某跳转点 ，第二个参数位该函数要带回去的内容<br>__FUNCTION__是由gcc提供的宏，用来调试程序，会自动识别。<br>利用上述函数写函数jump.c来练习。</p><p>14.资源的获取及控制<br>getrlimit(),用来获取资源总量<br>setrlimit()。用来设置资源总量<br>上述两个函数封装位ulimit</p>]]></content>
     
     
       
@@ -62,9 +82,9 @@
     <link href="http://example.com/2023/03/25/Linux%E8%A7%A3%E6%9E%90%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E5%8F%8A%E5%85%B6%E5%86%85%E5%AE%B9/"/>
     <id>http://example.com/2023/03/25/Linux%E8%A7%A3%E6%9E%90%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E5%8F%8A%E5%85%B6%E5%86%85%E5%AE%B9/</id>
     <published>2023-03-25T08:38:12.000Z</published>
-    <updated>2023-03-28T11:40:02.962Z</updated>
+    <updated>2023-03-31T03:38:13.272Z</updated>
     
-    <content type="html"><![CDATA[<p>1.解析目录有几种方法都是什么？<br>答：两种，第一种：利用glob,globfree解析通配符.第二种：把目录文件当作流来处理opendir(),closedir(),readdir(),rewinddir(),fseekdir(),seekdir(),telldir().<br>glob函数解析通配符(*匹配字符串，？匹配单个字符)<br>要求用glob.c实现法1，用opendir.c实现法2.</p><p>2.对于各种函数中的结构体，有的声明时候直接用结构体名才不报错，有的结构体名前必须加struct才不报错。报错的时候就试试另一种。</p><p>3.int64_t &#x3D;&#x3D; long long </p><p>4.du命令，显示当前文件或目录所占用的字节大小，以k位单位。</p><ol start="5"><li>(&#x2F;.*)是&#x2F;目录下所有的隐藏文件</li></ol><p>6.strncpy拷贝字符串，strncat追加字符串,strcpy也是拷贝但这个函数容易出现越界访问的问题，函数strrchr：第一参数位字符串，第二参数为整型，如果想表示符号可以用’&#x2F;‘这个结果是整型，””这个中间的是串常量，该函数用来寻找整个传中最右边的’&#x2F;‘.</p><p>7.写一个mydu.c的函数实现du的功能。<br>解：du命令用来回显当前路径文件大小，或者指定路径文件大小，故先要给定文件。所以区分文件有两种，一种是目录文件，一种是非目录文件，非目录文件直接返回大小，而目录文件要进行递归操作。在获取文件信息的时候要使用lstat因为符号链接文件大小的计算不能以源文件大小来衡量。<br>由于找文件大小首先需要文件名，所以要用到glob解析函数，但是文件又有隐藏和非隐藏两种类型，所以解析路径的模式匹配符号有’<em>‘与’.</em>‘,用glob解析会解析到’.’与’..’文件，所以会产生致命问题，这个递归一直在’.’与’..’之间来回循环，所以我们要添加一个函数来判断。因为.在&#x2F;后面所以用strrchr来找&#x2F;,返回这个位置指针，加1就是.&#x2F;..的为位置。<br>这个函数也可以用目录流的方式再写一遍。</p><p>8.如何优化一个递归函数？<br>答：如果一个变量单纯的使用在递归之前或者递归之后，那么该变量可以优化到静态区或者全局区，只需要在该变量前面加上static。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.解析目录有几种方法都是什么？<br>答：两种，第一种：利用glob,globfree解析通配符.第二种：把目录文件当作流来处理opendir(),closedir(),readdir(),rewinddir(),fseekdir(),seekdir(),telldir().<br>glob函数解析通配符(*匹配字符串，？匹配单个字符)<br>要求用glob.c实现法1，用opendir.c实现法2.<br>glob_t中gl_pathv与argv也是相同的存储格式</p><p>2.对于各种函数中的结构体，有的声明时候直接用结构体名才不报错，有的结构体名前必须加struct才不报错。报错的时候就试试另一种。</p><p>3.int64_t &#x3D;&#x3D; long long </p><p>4.du命令，显示当前文件或目录所占用的字节大小，以k位单位。</p><ol start="5"><li>(&#x2F;.*)是&#x2F;目录下所有的隐藏文件</li></ol><p>6.strncpy拷贝字符串，strncat追加字符串,strcpy也是拷贝但这个函数容易出现越界访问的问题，函数strrchr：第一参数位字符串，第二参数为整型，如果想表示符号可以用’&#x2F;‘这个结果是整型，””这个中间的是串常量，该函数用来寻找整个传中最右边的’&#x2F;‘.</p><p>7.写一个mydu.c的函数实现du的功能。<br>解：du命令用来回显当前路径文件大小，或者指定路径文件大小，故先要给定文件。所以区分文件有两种，一种是目录文件，一种是非目录文件，非目录文件直接返回大小，而目录文件要进行递归操作。在获取文件信息的时候要使用lstat因为符号链接文件大小的计算不能以源文件大小来衡量。<br>由于找文件大小首先需要文件名，所以要用到glob解析函数，但是文件又有隐藏和非隐藏两种类型，所以解析路径的模式匹配符号有’<em>‘与’.</em>‘,用glob解析会解析到’.’与’..’文件，所以会产生致命问题，这个递归一直在’.’与’..’之间来回循环，所以我们要添加一个函数来判断。因为.在&#x2F;后面所以用strrchr来找&#x2F;,返回这个位置指针，加1就是.&#x2F;..的为位置。<br>这个函数也可以用目录流的方式再写一遍。</p><p>8.如何优化一个递归函数？<br>答：如果一个变量单纯的使用在递归之前或者递归之后，那么该变量可以优化到静态区或者全局区，只需要在该变量前面加上static。</p>]]></content>
     
     
       
@@ -167,9 +187,9 @@
     <link href="http://example.com/2023/03/18/makefile/"/>
     <id>http://example.com/2023/03/18/makefile/</id>
     <published>2023-03-18T01:49:09.000Z</published>
-    <updated>2023-03-25T05:57:01.422Z</updated>
+    <updated>2023-03-30T06:51:36.290Z</updated>
     
-    <content type="html"><![CDATA[<p>1在linux环境下如何以最简单的方式实现vs中简化代码的操作(头文件与源文件分开写)?<br>答：用多文件连编:g++ text.c add.c sub.c div1.c -o a.out。</p><p>2.上述实现方式有什么问题？怎么解决？<br>答：当其中一个文件改变时，却需要所有文件跟着一起编译，这样非常耗时。应该各自编译各自的生成.o文件，最后再链接到一起，由此引出makefile工程管理器。</p><p>3.makefile三个重点：一个规则；两个函数；三个自动变量。</p><p>4.创建头文件<br>#ifndef <em>HEAD_H</em><br>#define <em>HEAD_H</em><br>所包含的头文件<br>#endif</p><p>5.在大小写makefile都存在的时候，调用make优先调用小写的makefile</p>]]></content>
+    <content type="html"><![CDATA[<p>1在linux环境下如何以最简单的方式实现vs中简化代码的操作(头文件与源文件分开写)?<br>答：用多文件连编:g++ text.c add.c sub.c div1.c -o a.out。</p><p>2.上述实现方式有什么问题？怎么解决？<br>答：当其中一个文件改变时，却需要所有文件跟着一起编译，这样非常耗时。应该各自编译各自的生成.o文件，最后再链接到一起，由此引出makefile工程管理器。</p><p>3.makefile三个重点：一个规则；两个函数；三个自动变量。</p><p>4.创建头文件<br>#ifndef <em>HEAD_H</em><br>#define <em>HEAD_H</em><br>所包含的头文件<br>#endif</p><p>5.在大小写makefile都存在的时候，调用make优先调用小写的makefile</p><p>6.在一个有很多.c文件的目录中想要具体执行哪一个时，要用make text ,而不是make text.c，虽然写vi的时候的文件名时text.c，此时make出的可执行文件就叫text。</p>]]></content>
     
     
       
@@ -410,27 +430,6 @@
       
     <summary type="html">&lt;p&gt;1.内存一共有几个区？&lt;br&gt;答：四个：代码区与全局区在程序运行之前就存在，栈区与堆区在程序运行后生成。&lt;/p&gt;
 &lt;p&gt;2.static与const修饰的区别？&lt;br&gt;答：static修饰的是静态变量放在全局区，而const修饰的是常量（其他常量），二者都在全局区。但是静态</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>dat 4</title>
-    <link href="http://example.com/2023/02/22/C++3/"/>
-    <id>http://example.com/2023/02/22/C++3/</id>
-    <published>2023-02-22T01:39:06.000Z</published>
-    <updated>2023-02-22T06:36:24.948Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.Linux下的清屏操作？<br>答：system(“reset”); 需要包含头文件<stdlib></p><p>2.如何比较字符串？（char<em>）<br>答：用函数int  strcmp(const char</em> s1,const char * s2),字符串相等返回0，否则大于返回1，小于返回-1，需要包含头文件<string></p><p>3.如何比较字符串？（string）<br>答：string是c++中的类型，可以直接使用&#x3D;&#x3D;进行比较！！！</p><p>4.swicth语句中，若case代码过长，需要加{}。</p><p>5.在Linux中如果自定义函数名为黄色说明与库中函数重名。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.Linux下的清屏操作？&lt;br&gt;答：system(“reset”); 需要包含头文件&lt;stdlib&gt;&lt;/p&gt;
-&lt;p&gt;2.如何比较字符串？（char&lt;em&gt;）&lt;br&gt;答：用函数int  strcmp(const char&lt;/em&gt; s1,const char * s2),</summary>
       
     
     
