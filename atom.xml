@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-04-01T03:19:56.406Z</updated>
+  <updated>2023-04-05T07:27:09.253Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,57 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>各种各样不报错的bug</title>
+    <link href="http://example.com/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/"/>
+    <id>http://example.com/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/</id>
+    <published>2023-04-05T07:25:28.000Z</published>
+    <updated>2023-04-05T07:27:09.253Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.在写while的条件语句时候，如果条件语句是个复杂的表达式，一定要梳理好括号之间的关系。(&#x3D;复制给谁后)再用&lt;与谁比较.</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.在写while的条件语句时候，如果条件语句是个复杂的表达式，一定要梳理好括号之间的关系。(&amp;#x3D;复制给谁后)再用&amp;lt;与谁比较.&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 并发</title>
+    <link href="http://example.com/2023/04/04/Linux-%E5%B9%B6%E5%8F%91/"/>
+    <id>http://example.com/2023/04/04/Linux-%E5%B9%B6%E5%8F%91/</id>
+    <published>2023-04-03T23:45:45.000Z</published>
+    <updated>2023-04-05T07:32:18.055Z</updated>
+    
+    <content type="html"><![CDATA[<p>并发分为两种：1.信号 2.线程 </p><p>所有例子写在lianxi - signal 目录下</p><p>1.什么使同步与异步<br>答：同步事件一切操作结果都已知，异步：什么时候发生什么事情不知道，发生某件事之后会产生什么结果不知道。</p><p>2.异步事件处理的常用方法<br>答：查询法(发生频率高)，通知法(发生频率稀疏)</p><p>3.信号的概念：信号使软件中断。但与中断有区别，中断是底层的硬件上的，而信号是软件上的应用层的。信号的响应依赖于中断。</p><p>4.signal<br>void (*signal(int signum,void(*func)(int))) (int); 这是一个返回类型是函数指针的函数声明，该函数的参数是一个int类型和一个函数指针。<br>这种写法比man手册中标准c写法好，这种少站一个名字，防止命名冲突<br>eg star.c<br>信号会打断阻塞的系统调用！！！所以以前写read，write的函数中报错的时候会把SIGINT当作错误设置errno为EINTR，要想使Ctrl+c不打断函数的打开和读写，就添加do while循环，使即便收到假错(Ctrl+c)也继续执行。<br>有图</p><p>5.用kill -l命令查看当前系统的所有信号<br>前31号为标准信号，34之后为实时信号</p><p>6.信号的行为不可靠：程序的执行现场是由内核布置的，有可能第一次还没执行结束就开始第二次调用，像递归但不是。</p><p>7.可重入函数，解决信号不可靠问题。<br>所有的系统调用都是可重入的函数(反过来不成立)，一部分库函数也是可重入的，如：memcpy，函数名_r(_r就是可重入的意思)，这些函数都可用于信号处理函数之中。</p><p>8.信号的响应过程<br>信号从收到到相应有一个不可避免的延迟<br>思考：如何忽略掉一个信号？SIG_IGN就是把指定的信号的mask位永远置为0.<br>思考：标准信号为什么会丢失？一次中断内来了10次同一信号，首先p置1-&gt;m&amp;p为1-&gt;m&#x3D;0,p&#x3D;0，此时再来9个信号-&gt;m&#x3D;0,p&#x3D;1,执行结束-&gt;m&#x3D;1,p&#x3D;1-&gt;再执行一次。所以来10次信号，就执行了2次。<br>标准信号的响应没有严格的顺序。<br>具体执行过程如下：<br>每一个进程都会维护一组位图，在信号响应过程中，一个进程会维护两个位图一个叫mask初始值32位1，一个叫pending初始32位0。<br>当程序执行过程中未收到信号的时候：程序运行时间片结束抱着现场扎入内核，保存地址用于返回，等待调度。当调度到来时系统会按位与mask&amp;pending，如果结果为0，说明没有信号到来，那么原路返回继续执行。<br>某一时刻收到信号：进程抱着现场扎内核，并将pending的某一位改为1，后进入等待状态，当调度到来时先mask&amp;pending发现某一位为1，此时不返回到原地址，此时把那一位mask与pending同时置0，之后进入signal函数的调用，把返回地址修改为你给的函数地址，等待执行结束后再次扎入内核，并将mask值修改为1，返回地址修改为原函数，再次调度后继续mask&amp;pending若结果为0，则继续执行原函数。</p><ol start="9"><li>kill()用来发信号的<br>raise()给当前进程发信号<br>alarm() eg：alarm.c，调用alarm(n)函数,会在n秒后发出SIGALRM信号，并执行后续代码，如果没有使用signal函数处理这个信号，程序会直接结束。<br>pause()是一个人为创造的阻塞系统调用，等待一个信号来调用它，非常适合与死循环搭配。当sleep由alarm和pasue封装的时候，最好不要用这个sleep。<br>综合eg：5sec.c，5sec_sig.c<br>gcc 5sec_sig.c -O1 这是优化的意思<br>gcc -S 5sec_sig.c 这是汇编的意思<br>漏桶流控实例eg：slowcat.c。漏桶的意思是即便来了十个数据也不紧不慢的每次读取10个。<br>令牌桶eg：slowcat2.c</li></ol><p>10.写一个令牌库，用于流量控制 mytbf。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;并发分为两种：1.信号 2.线程 &lt;/p&gt;
+&lt;p&gt;所有例子写在lianxi - signal 目录下&lt;/p&gt;
+&lt;p&gt;1.什么使同步与异步&lt;br&gt;答：同步事件一切操作结果都已知，异步：什么时候发生什么事情不知道，发生某件事之后会产生什么结果不知道。&lt;/p&gt;
+&lt;p&gt;2.异步事件</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Linux 进程</title>
     <link href="http://example.com/2023/03/30/Linux-%E8%BF%9B%E7%A8%8B/"/>
     <id>http://example.com/2023/03/30/Linux-%E8%BF%9B%E7%A8%8B/</id>
     <published>2023-03-30T06:07:34.000Z</published>
-    <updated>2023-04-01T03:19:56.406Z</updated>
+    <updated>2023-04-03T07:31:18.886Z</updated>
     
-    <content type="html"><![CDATA[<p>1.进程标识符 pid，它的类型位pid_t为16位有符号整型数，但只能用非负的，由于每个系统不同，所以位数不同，比较保险的情况是转换为longlong类型输出。<br>用ps命令查看进程 axf  ，axm ， ax -L<br>进程号是顺次向下使用1-&gt;2-&gt;3,2释放了2,下次使用时使用4<br>getpid(),不用传参，哪个进程在使用返回值就是哪个继承的pid<br>getppid()</p><p>2.进程的产生<br>the calling process 是当前进程的意思<br>fork(),也是执行一次返回两次的函数，当父进程调用fork函数的时候，会创建一个子进程，其内容与父进程一模一样，连执行的位置都一样，除了一些不一样。<br>fork后父子进程的区别：fork的返回值不一样，pid不同，ppid也不同，未决信号和文件锁不继承，资源利用量归零<br>init进程：是一号进程，是所有进程的祖先进程，而不一定时父进程，当用ps axf查看时，如果最右侧的串是顶格写的，那么它的父进程是init<br>写个小程序fork1.c练习<br>调度器的调度策略来决定哪个进程先运行，不要凭空猜测父子进程谁新运行。<br>fflush()的重要性。</p><p>3.time命令给出的time信息不属于标准输出，无法重定向</p><p>4.写一个程序primer1.c实现201个子进程来查找30000000-30000200中的质数。</p><p>5.连续两次使用ps -axf结果为什么一样？<br>答：因为没有用kill杀死上一个进程。</p><p>6.谁创建谁释放，如果父进程创建子进程，那么子进程结束后会变为僵尸态，等父进程收尸，如果父进程不收尸直接结束，那么子进程会编程孤儿态，由init进程接管。</p><p>7.当父进程数据量过大，但又想创建子进程实现简单功能，此时直接fork会很浪费，那怎么办？<br>答：可以用vfork。以前的fork创建的子进程会完全拷贝父进程数据并创建一份新的空间给自己用，所以出现vfork使创建的子进程与父进程的位置不同，但指针指向的数据块位置相同，这样可以让子进程完成简单的操作，但也只能用这些函数(exec函数族)，所以后来给fork增加了写时拷贝的功能 ，fork做了改进，创建的子进程与父进程指向同一数据块，父与子无论谁想写改数据都可以，谁想改谁就复制一份，之后一直指向复制的那一份。</p><p>absolute value是绝对值的意思</p><p>8.进程的消亡及释放资源(收尸)<br>wait(int * status)，wait的意思使等待进程状态改变，再man手册看到时，可以翻译为收尸。该函数用来收尸，并获得被收尸的子进程信息，放在&amp;status里.详情见primer2.c<br>waitpid()<br>waitid()<br>wait3()<br>wait4()</p><p>9.并发的三种算法<br>分块，交叉分配，池<br>池：上游不断向容器中分配任务，下游好几个进程线程抢任务。<br>eg：用交叉分配法算质数primern.c</p><p>10.exec函数族:用一个全新的进程映像替换目前进程映像，全新的进程是谁，干什么都用exec函数族中的函数实现，但是pid不变<br>execl()，第二个参数相当于argv[0],第三个参数相当于argv[1].<br>execlp()<br>execle()<br>execv()<br>execvp()<br>eg：ex.c<br>char * 对应的东西应该写在””内<br>注意：要在exec前调用fflush，因为exec创建新的进程映像，如果不fflush，原程序调用到exec就被没有了，包括缓冲区的内容，直接生成新进程。</p><p>11.few(fork,exec,wait)搭建了整个unix世界<br>eg:few.c，这就解释了为什么shell创建的子进程是自己定义的而不是另一个shell。</p><p>12.一个命令的二进制可执行文件存放在磁盘上，这个命令叫外部命令，其余都叫内部命令(比如目录管理，进程消亡怎么处理，调度等)。</p><p>13.实现shell的外部命令处理：myshell.c</p><p>14.用户权限和组权限,鉴定权限的时候用的是effective id<br>u+s&#x2F;g+s<br>无u+s&#x2F;g+s用ls显示的权限是rwx，当给一个用户添加u+s权限后，他的权限会变成rws，意味着当别的用户调用当前可执行文件的时候，他的身份会切换位当前这个二进制文件的user身份来执行，这个切换的过程都是由exec函数识别和完成的。<br>getuid(),geteuid()<br>getgid(),getegid()<br>setuid(),setgid()<br>setreuid(),setregid()原子化交换<br>seteuid(),setegid()<br>eg:mysu<br>写完程序正常执行.&#x2F;mysu 0 cat &#x2F;etc&#x2F;shadow肯定不能执行，这就要用到u+s了，用su切换为root把文件所有者user改为root，把文件权限改为u+s，之后再执行就会成功。<br>0代表root用户</p><p>15.命令解释器<br>脚本的第一句话：#! &#x2F;bin&#x2F;bash  ，其中#!为脚本标志，他后面的是命令解释器或可执行文件，该解释器或可执行文件会解释这个脚本文件所有命令。<br>eg:cmdit</p>]]></content>
+    <content type="html"><![CDATA[<p>1.进程标识符 pid，它的类型位pid_t为16位有符号整型数，但只能用非负的，由于每个系统不同，所以位数不同，比较保险的情况是转换为longlong类型输出。<br>用ps命令查看进程 axf  ，axm ， ax -L<br>进程号是顺次向下使用1-&gt;2-&gt;3,2释放了2,下次使用时使用4<br>getpid(),不用传参，哪个进程在使用返回值就是哪个继承的pid<br>getppid()</p><p>2.进程的产生<br>the calling process 是当前进程的意思<br>fork(),也是执行一次返回两次的函数，当父进程调用fork函数的时候，会创建一个子进程，其内容与父进程一模一样，连执行的位置都一样，除了一些不一样。<br>fork后父子进程的区别：fork的返回值不一样，pid不同，ppid也不同，未决信号和文件锁不继承，资源利用量归零<br>init进程：是一号进程，是所有进程的祖先进程，而不一定时父进程，当用ps axf查看时，如果最右侧的串是顶格写的，那么它的父进程是init<br>写个小程序fork1.c练习<br>调度器的调度策略来决定哪个进程先运行，不要凭空猜测父子进程谁新运行。<br>fflush()的重要性。<br>创建之后父子进程同组，父进程是组长。</p><p>3.time命令给出的time信息不属于标准输出，无法重定向</p><p>4.写一个程序primer1.c实现201个子进程来查找30000000-30000200中的质数。</p><p>5.连续两次使用ps -axf结果为什么一样？<br>答：因为没有用kill杀死上一个进程。</p><p>6.谁创建谁释放，如果父进程创建子进程，那么子进程结束后会变为僵尸态，等父进程收尸，如果父进程不收尸直接结束，那么子进程会编程孤儿态，由init进程接管。</p><p>7.当父进程数据量过大，但又想创建子进程实现简单功能，此时直接fork会很浪费，那怎么办？<br>答：可以用vfork。以前的fork创建的子进程会完全拷贝父进程数据并创建一份新的空间给自己用，所以出现vfork使创建的子进程与父进程的位置不同，但指针指向的数据块位置相同，这样可以让子进程完成简单的操作，但也只能用这些函数(exec函数族)，所以后来给fork增加了写时拷贝的功能 ，fork做了改进，创建的子进程与父进程指向同一数据块，父与子无论谁想写改数据都可以，谁想改谁就复制一份，之后一直指向复制的那一份。</p><p>absolute value是绝对值的意思</p><p>8.进程的消亡及释放资源(收尸)<br>wait(int * status)，wait的意思使等待进程状态改变，再man手册看到时，可以翻译为收尸。该函数用来收尸，并获得被收尸的子进程信息，放在&amp;status里.详情见primer2.c<br>waitpid()<br>waitid()<br>wait3()<br>wait4()</p><p>9.并发的三种算法<br>分块，交叉分配，池<br>池：上游不断向容器中分配任务，下游好几个进程线程抢任务。<br>eg：用交叉分配法算质数primern.c</p><p>10.exec函数族:用一个全新的进程映像替换目前进程映像，全新的进程是谁，干什么都用exec函数族中的函数实现，但是pid不变<br>execl()，第二个参数相当于argv[0],第三个参数相当于argv[1].<br>execlp()<br>execle()<br>execv()<br>execvp()<br>eg：ex.c<br>char * 对应的东西应该写在””内<br>注意：要在exec前调用fflush，因为exec创建新的进程映像，如果不fflush，原程序调用到exec就被没有了，包括缓冲区的内容，直接生成新进程。</p><p>11.few(fork,exec,wait)搭建了整个unix世界<br>eg:few.c，这就解释了为什么shell创建的子进程是自己定义的而不是另一个shell。</p><p>12.一个命令的二进制可执行文件存放在磁盘上，这个命令叫外部命令，其余都叫内部命令(比如目录管理，进程消亡怎么处理，调度等)。</p><p>13.实现shell的外部命令处理：myshell.c</p><p>14.用户权限和组权限,鉴定权限的时候用的是effective id<br>u+s&#x2F;g+s<br>无u+s&#x2F;g+s用ls显示的权限是rwx，当给一个用户添加u+s权限后，他的权限会变成rws，意味着当别的用户调用当前可执行文件的时候，他的身份会切换位当前这个二进制文件的user身份来执行，这个切换的过程都是由exec函数识别和完成的。<br>getuid(),geteuid()<br>getgid(),getegid()<br>setuid(),setgid()<br>setreuid(),setregid()原子化交换<br>seteuid(),setegid()<br>eg:mysu<br>写完程序正常执行.&#x2F;mysu 0 cat &#x2F;etc&#x2F;shadow肯定不能执行，这就要用到u+s了，用su切换为root把文件所有者user改为root，把文件权限改为u+s，之后再执行就会成功。<br>0代表root用户</p><p>15.命令解释器<br>脚本的第一句话：#! &#x2F;bin&#x2F;bash  ，其中#!为脚本标志，他后面的是命令解释器或可执行文件，该解释器或可执行文件会解释这个脚本文件所有命令。<br>eg:cmdit</p><ol start="16"><li>system可以堪为few的简单封装,是调用shell解决的<br>eg： sys.c&#x3D;&#x3D;sys1.c</li></ol><p>17.守护进程：在后台运行不受任何终端控制<br>会话：终端的登录产生一个标准的会话session，其标识为sid<br>终端(一台只会输入输出的计算机)<br>进程组运行在前台与后台，前台进程组有且最多只能有一个<br>setsid()<br>getpgrp()<br>getpgid()<br>setpgid()<br>ps axj:ppid(父进程id) pid(进程id) pgid(进程组id) sid(会话id) tty(控制终端：？意味脱离) tpgid(值为-1代表是守护进程)<br>单实例守护进程：锁文件 &#x2F;var&#x2F;run&#x2F;name.pid,使一个守护进程只有一个在跑<br>启动脚本文件：&#x2F;etc&#x2F;rc* , 让某守护进程开机自启动，后面加&amp;，意思是放到后台运行。</p><p>18.怎么判断一个进程是不是守护进程？<br>答：因为守护进程会一直运行，不需要父进程收尸，所以要求父进程创建完子进程后推出，这就导致了子进程由init也就是1号进程接管，所以守护进程的ppid为1，又因为守护进程必须是组长，所以pid&#x3D;pgid&#x3D;sid，且tty为?.</p><p>19.写一个守护进程mydaemon.c<br>其中出现了很多问题：1.chidr改完路径后，写的文件都得在修改后的路径操作，2.由fork创建的子进程其父进程退出后，并不是由1号init接收，而是由&#x2F;sbin&#x2F;upstart接收，他是图形化界面下的守护进程。<br>小结：有时候结果不是想象中的模样不一定是代码的问题。</p><p>20.系统日志 &#x2F;var&#x2F;log&#x2F;<br>syslogd服务<br>openlog() 没有返回值意味着不会出错<br>syslog()<br>closelog()</p>]]></content>
     
     
       
@@ -316,9 +360,9 @@
     <link href="http://example.com/2023/02/28/Linux-1/"/>
     <id>http://example.com/2023/02/28/Linux-1/</id>
     <published>2023-02-28T09:02:20.000Z</published>
-    <updated>2023-03-19T01:31:18.083Z</updated>
+    <updated>2023-04-05T06:04:46.528Z</updated>
     
-    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p><p>3.errno可以想象为os定义的全局变量可直接当整型使用。但要引用头文件，errno.h。之后用strerror(errno)返回string类型可以用%s打印，strerror的头文件是string.h。</p><p>4.*与%都是通配符，但是%有锁定的意味。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p><p>3.errno可以想象为os定义的全局变量可直接当整型使用。但要引用头文件，errno.h。之后用strerror(errno)返回string类型可以用%s打印，strerror的头文件是string.h。</p><p>4.*与%都是通配符，但是%有锁定的意味。</p><p>5.在使用vim的时候千万不要用Ctrl+s否则vim会卡死，使用Ctrl+q可以退出卡死状态</p>]]></content>
     
     
       
@@ -388,48 +432,6 @@
       
     <summary type="html">&lt;p&gt;1.拷贝构造函数的第二种调用时机？&lt;br&gt;答：利用函数的值传递方式，这样操作会拷贝一份传入的对象，此时调用了拷贝构造函数。&lt;/p&gt;
 &lt;p&gt;2.拷贝构造函数的第三种调用时机？&lt;br&gt;答：利用函数返回值（为对象）返回局部变量的时候会调用拷贝构造，因为局部变量随着函数结束而销毁，</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>day 6</title>
-    <link href="http://example.com/2023/02/25/C++5/"/>
-    <id>http://example.com/2023/02/25/C++5/</id>
-    <published>2023-02-25T03:14:59.000Z</published>
-    <updated>2023-02-28T01:28:55.083Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.类与结构体的区别？<br>答：比较或者赋值结构体可以直接用两个结构体比较或赋值、而对于类，比较类是否相等需要单独比较其中的成员函数。</p><p>2.vs中如何使用头文件和源文件化简程序？<br>答：参考【黑马程序员匠心之作|C++教程从0到1入门编程】第105节。</p><p>3.默认构造函数（无参构造）调用的时候不要加()，加了会被编译器误以为是函数的声明，不会被编译器认为是创建对象。</p><p>4.匿名对象如何创建以及他的特点？<br>答：特点一：直接使用构造函数不给对象起名：”类名（10）；&#x2F;&#x2F;这是有参构造函数。“由于匿名对象没有名字，所以本行执行完就结束-&gt;会引发调用析构函数的操作。<br>      特点二：不能用拷贝构造函数初始化匿名对象。否则会被认为是堆被拷贝对象的二次声明。</p><p>5.无参构造函数的匿名对象怎么写？<br>答：类名（）</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.类与结构体的区别？&lt;br&gt;答：比较或者赋值结构体可以直接用两个结构体比较或赋值、而对于类，比较类是否相等需要单独比较其中的成员函数。&lt;/p&gt;
-&lt;p&gt;2.vs中如何使用头文件和源文件化简程序？&lt;br&gt;答：参考【黑马程序员匠心之作|C++教程从0到1入门编程】第105节。&lt;</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>day 5</title>
-    <link href="http://example.com/2023/02/23/C++4/"/>
-    <id>http://example.com/2023/02/23/C++4/</id>
-    <published>2023-02-23T01:30:22.000Z</published>
-    <updated>2023-02-23T08:16:42.238Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.内存一共有几个区？<br>答：四个：代码区与全局区在程序运行之前就存在，栈区与堆区在程序运行后生成。</p><p>2.static与const修饰的区别？<br>答：static修饰的是静态变量放在全局区，而const修饰的是常量（其他常量），二者都在全局区。但是静态变量也是变量，也是可变的，只不过不随函数的开始和结束而创建和消亡。</p><p>3.如何利用new？<br>答：创建变量 int *p &#x3D;new int(10); delete p;     &#x2F;&#x2F;使用（）表示创建变量且值为10。<br>   ：创建数组 int *arr &#x3D;new int[10]; delete[] arr;  &#x2F;&#x2F;使用[]表示创建长度位10的数组。</p><p>4.引用的本质？<br>答：引用：int &amp;b &#x3D;a;给a取别名b，操作b等于操作a。本质就是指针常量 int * const b &#x3D;&amp;a ;b的指向不能改，但内容可以改</p><p>5.引用传递？<br>答：swap(a,b)-&gt;&gt;void swap(&amp;a,&amp;b);&#x2F;&#x2F;相当于形参中的a为实参a的别名。</p><p>6.函数的返回值可以是引用：使用int&amp;修饰函数。此时该函数可以作为左值，但是局部变量不可以被引用返回。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.内存一共有几个区？&lt;br&gt;答：四个：代码区与全局区在程序运行之前就存在，栈区与堆区在程序运行后生成。&lt;/p&gt;
-&lt;p&gt;2.static与const修饰的区别？&lt;br&gt;答：static修饰的是静态变量放在全局区，而const修饰的是常量（其他常量），二者都在全局区。但是静态</summary>
       
     
     

@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="description" content=""><meta name="keyword"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Linux 并发</title><link rel="shortcut icon" href="/images/avatar.png" type="image/x-icon"><link href="/styles/site.css" rel="stylesheet"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head><body><header class="container" id="header"><div class="header"><div class="header-left"><div class="avatar"><img src="/images/avatar.png"></div><div class="author"><div class="author-name"><a href="/">Zhaogy233</a></div><div class="about-me">Hi~</div></div></div><div class="header-right"><ul class="navigation"><li><a href="/archives">归档</a></li></ul></div><div class="about-me-mask"><div class="about-me-wrap"><div class="about-me__header"><div class="avatar"><img src="/images/avatar.png"></div></div><ul class="socials"><li class="social-item"><span class="label"><img src="/images/socials/github.svg" alt="https://github.com/Zhaogy233"></span><a href="https://github.com/Zhaogy233" target="_blank" title="https://github.com/Zhaogy233">https://github.com/Zhaogy233</a></li><li class="social-item"><span class="label"><img src="/images/socials/email.svg" alt="3468482206@qq.com"></span><span>3468482206@qq.com</span></li><li class="social-item"><span class="label"><img src="/images/socials/wechat.svg" alt="z15566143013"></span><span>z15566143013</span></li></ul></div></div></div></header><div class="container post"><section class="article"><div class="title">Linux 并发</div><div class="date">写于2023-04-04T07:45:45+08:00</div><div class="content"><p>并发分为两种：1.信号 2.线程 </p>
+<p>所有例子写在lianxi - signal 目录下</p>
+<p>1.什么使同步与异步<br>答：同步事件一切操作结果都已知，异步：什么时候发生什么事情不知道，发生某件事之后会产生什么结果不知道。</p>
+<p>2.异步事件处理的常用方法<br>答：查询法(发生频率高)，通知法(发生频率稀疏)</p>
+<p>3.信号的概念：信号使软件中断。但与中断有区别，中断是底层的硬件上的，而信号是软件上的应用层的。信号的响应依赖于中断。</p>
+<p>4.signal<br>void (*signal(int signum,void(*func)(int))) (int); 这是一个返回类型是函数指针的函数声明，该函数的参数是一个int类型和一个函数指针。<br>这种写法比man手册中标准c写法好，这种少站一个名字，防止命名冲突<br>eg star.c<br>信号会打断阻塞的系统调用！！！所以以前写read，write的函数中报错的时候会把SIGINT当作错误设置errno为EINTR，要想使Ctrl+c不打断函数的打开和读写，就添加do while循环，使即便收到假错(Ctrl+c)也继续执行。<br>有图</p>
+<p>5.用kill -l命令查看当前系统的所有信号<br>前31号为标准信号，34之后为实时信号</p>
+<p>6.信号的行为不可靠：程序的执行现场是由内核布置的，有可能第一次还没执行结束就开始第二次调用，像递归但不是。</p>
+<p>7.可重入函数，解决信号不可靠问题。<br>所有的系统调用都是可重入的函数(反过来不成立)，一部分库函数也是可重入的，如：memcpy，函数名_r(_r就是可重入的意思)，这些函数都可用于信号处理函数之中。</p>
+<p>8.信号的响应过程<br>信号从收到到相应有一个不可避免的延迟<br>思考：如何忽略掉一个信号？SIG_IGN就是把指定的信号的mask位永远置为0.<br>思考：标准信号为什么会丢失？一次中断内来了10次同一信号，首先p置1-&gt;m&amp;p为1-&gt;m&#x3D;0,p&#x3D;0，此时再来9个信号-&gt;m&#x3D;0,p&#x3D;1,执行结束-&gt;m&#x3D;1,p&#x3D;1-&gt;再执行一次。所以来10次信号，就执行了2次。<br>标准信号的响应没有严格的顺序。<br>具体执行过程如下：<br>每一个进程都会维护一组位图，在信号响应过程中，一个进程会维护两个位图一个叫mask初始值32位1，一个叫pending初始32位0。<br>当程序执行过程中未收到信号的时候：程序运行时间片结束抱着现场扎入内核，保存地址用于返回，等待调度。当调度到来时系统会按位与mask&amp;pending，如果结果为0，说明没有信号到来，那么原路返回继续执行。<br>某一时刻收到信号：进程抱着现场扎内核，并将pending的某一位改为1，后进入等待状态，当调度到来时先mask&amp;pending发现某一位为1，此时不返回到原地址，此时把那一位mask与pending同时置0，之后进入signal函数的调用，把返回地址修改为你给的函数地址，等待执行结束后再次扎入内核，并将mask值修改为1，返回地址修改为原函数，再次调度后继续mask&amp;pending若结果为0，则继续执行原函数。</p>
+<ol start="9">
+<li>kill()用来发信号的<br>raise()给当前进程发信号<br>alarm() eg：alarm.c，调用alarm(n)函数,会在n秒后发出SIGALRM信号，并执行后续代码，如果没有使用signal函数处理这个信号，程序会直接结束。<br>pause()是一个人为创造的阻塞系统调用，等待一个信号来调用它，非常适合与死循环搭配。当sleep由alarm和pasue封装的时候，最好不要用这个sleep。<br>综合eg：5sec.c，5sec_sig.c<br>gcc 5sec_sig.c -O1 这是优化的意思<br>gcc -S 5sec_sig.c 这是汇编的意思<br>漏桶流控实例eg：slowcat.c。漏桶的意思是即便来了十个数据也不紧不慢的每次读取10个。<br>令牌桶eg：slowcat2.c</li>
+</ol>
+<p>10.写一个令牌库，用于流量控制 mytbf。</p>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/">各种各样不报错的bug</a></li><li>下一篇：<a href="/2023/03/30/Linux-%E8%BF%9B%E7%A8%8B/">Linux 进程</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+<script src="/script/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<script src="/script/index.js"></script>
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-61220413-1', 'auto');
+ga('send', 'pageview');</script>
+<script src="/script/post.js"></script>
+</body></html>
