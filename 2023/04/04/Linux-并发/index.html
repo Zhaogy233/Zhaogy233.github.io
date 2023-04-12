@@ -8,11 +8,17 @@
 <p>5.用kill -l命令查看当前系统的所有信号<br>前31号为标准信号，34之后为实时信号</p>
 <p>6.信号的行为不可靠：程序的执行现场是由内核布置的，有可能第一次还没执行结束就开始第二次调用，像递归但不是。</p>
 <p>7.可重入函数，解决信号不可靠问题。<br>所有的系统调用都是可重入的函数(反过来不成立)，一部分库函数也是可重入的，如：memcpy，函数名_r(_r就是可重入的意思)，这些函数都可用于信号处理函数之中。</p>
-<p>8.信号的响应过程<br>信号从收到到相应有一个不可避免的延迟<br>思考：如何忽略掉一个信号？SIG_IGN就是把指定的信号的mask位永远置为0.<br>思考：标准信号为什么会丢失？一次中断内来了10次同一信号，首先p置1-&gt;m&amp;p为1-&gt;m&#x3D;0,p&#x3D;0，此时再来9个信号-&gt;m&#x3D;0,p&#x3D;1,执行结束-&gt;m&#x3D;1,p&#x3D;1-&gt;再执行一次。所以来10次信号，就执行了2次。<br>标准信号的响应没有严格的顺序。<br>具体执行过程如下：<br>每一个进程都会维护一组位图，在信号响应过程中，一个进程会维护两个位图一个叫mask初始值32位1，一个叫pending初始32位0。<br>当程序执行过程中未收到信号的时候：程序运行时间片结束抱着现场扎入内核，保存地址用于返回，等待调度。当调度到来时系统会按位与mask&amp;pending，如果结果为0，说明没有信号到来，那么原路返回继续执行。<br>某一时刻收到信号：进程抱着现场扎内核，并将pending的某一位改为1，后进入等待状态，当调度到来时先mask&amp;pending发现某一位为1，此时不返回到原地址，此时把那一位mask与pending同时置0，之后进入signal函数的调用，把返回地址修改为你给的函数地址，等待执行结束后再次扎入内核，并将mask值修改为1，返回地址修改为原函数，再次调度后继续mask&amp;pending若结果为0，则继续执行原函数。</p>
-<ol start="9">
-<li>kill()用来发信号的<br>raise()给当前进程发信号<br>alarm() eg：alarm.c，调用alarm(n)函数,会在n秒后发出SIGALRM信号，并执行后续代码，如果没有使用signal函数处理这个信号，程序会直接结束。<br>pause()是一个人为创造的阻塞系统调用，等待一个信号来调用它，非常适合与死循环搭配。当sleep由alarm和pasue封装的时候，最好不要用这个sleep。<br>综合eg：5sec.c，5sec_sig.c<br>gcc 5sec_sig.c -O1 这是优化的意思<br>gcc -S 5sec_sig.c 这是汇编的意思<br>漏桶流控实例eg：slowcat.c。漏桶的意思是即便来了十个数据也不紧不慢的每次读取10个。<br>令牌桶eg：slowcat2.c</li>
-</ol>
-<p>10.写一个令牌库，用于流量控制 mytbf。</p>
+<p>8.信号的响应过程<br>信号从收到到相应有一个不可避免的延迟<br>思考：如何忽略掉一个信号？SIG_IGN就是把指定的信号的mask位永远置为0.<br>思考：标准信号为什么会丢失？一次中断内来了10次同一信号，首先p置1-&gt;m&amp;p为1-&gt;m&#x3D;0,p&#x3D;0，此时再来9个信号-&gt;m&#x3D;0,p&#x3D;1,执行结束-&gt;m&#x3D;1,p&#x3D;1-&gt;再执行一次。所以来10次信号，就执行了2次。<br>标准信号的响应没有严格的顺序。<br>具体执行过程如下：<br>每一个进程都会维护一组位图，在信号响应过程中，一个进程会维护两个位图一个叫mask初始值32位1，一个叫pending初始32位0。<br>当程序执行过程中未收到信号的时候：程序运行时间片结束抱着现场扎入内核，保存地址用于返回，等待调度。当调度到来时系统会按位与mask&amp;pending，如果结果为0，说明没有信号到来，那么原路返回继续执行。<br>某一时刻收到信号：进程抱着现场扎内核，并将pending的某一位改为1，后进入等待状态，当调度到来时先mask&amp;pending发现某一位为1，此时不返回到原地址，此时把那一位mask与pending同时置0，之后进入signal函数的调用，把返回地址修改为你给的函数地址，等待执行结束后再次扎入内核，并将mask值修改为1，返回地址修改为原函数，再次调度后继续mask&amp;pending若结果为0，则继续执行原函数。<br>程序不能从信号处理函数中随意的往外跳（sigsetjmp，siglongjmp），这样会错过回main时最后把mask修改为1的机会。<br>9.<br>kill()用来发信号的<br>raise()给当前进程发信号<br>alarm() eg：alarm.c，调用alarm(n)函数,会在n秒后发出SIGALRM信号，并执行后续代码，如果没有使用signal函数处理这个信号，程序会直接结束。<br>pause()是一个人为创造的阻塞系统调用，等待一个信号来调用它，非常适合与死循环搭配。当sleep由alarm和pasue封装的时候，最好不要用这个sleep。因为一个程序出现两个alarm会出错。<br>综合eg：5sec.c，5sec_sig.c<br>gcc 5sec_sig.c -O1 这是优化的意思<br>gcc -S 5sec_sig.c 这是汇编的意思<br>漏桶流控实例eg：slowcat.c。漏桶的意思是即便来了十个数据也不紧不慢的每次读取10个。<br>令牌桶eg：slowcat2.c</p>
+<p>10.写一个令牌库，用于流量控制<br>eg: mytbf。</p>
+<p>11.使用单一计时器，构造一组函数，实现任意数量的计时器。<br>eg: anytimer</p>
+<p>12.setitimer(),这个函数也是用来实现定时的，但是比alarm更精确，对it_value倒计时，倒计时结束后把it_value的值重置为it_interval<br>it_interval.tv_sec:这个用来指定多少秒<br>it_interval.tv_usec:这个用来指定微秒<br>上述两者加起来就是要指定第一回延迟后每次延迟的时间</p>
+<p>13.abort()<br>人为制造一个异常，杀掉当前进程，得到core dump现场</p>
+<p>14.system()<br>在有信号参与的程序当中，要阻塞住一个信号，要忽略掉两个信号。</p>
+<p>15.休眠函数<br>sleep(),nanosleep(),usleep(),select()</p>
+<p>16.信号集<br>信号集类型:sigset_t<br>sigemptyset()<br>sigfillset()<br>sigaddset()<br>sigdelset()<br>sigismember()</p>
+<p>17.信号屏蔽字<br>sigprocmask()人为决定信号什么时候被响应<br>16与17的eg:block.c</p>
+<p>18.扩展<br>sigsuspend(),用信号驱动程序。eg:susp.c<br>sigaction(),非常重要，用来替换signal函数。eg:siga.c，用sigaction改mytbf，让其只接收kernel信号，防止被攻击出错。<br>命令kill -ALRM pid:给pid发送ALRM信号<br>bit mask就是位图的意思</p>
+<p>19.实时信号<br>先响应标准信号(无序会丢失)，再响应实时信号(有序排队，不丢失)<br>eg:susp_rt.c 使用kill -40 pid给进程发信号来测试，只能时40因为用的信号是34+6<br>实时信号队列一共可以存储几个信号，使用ulimit -a查询pending signals</p>
 </div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/">各种各样不报错的bug</a></li><li>下一篇：<a href="/2023/03/30/Linux-%E8%BF%9B%E7%A8%8B/">Linux 进程</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="description" content=""><meta name="keyword"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Linux 线程并发</title><link rel="shortcut icon" href="/images/avatar.png" type="image/x-icon"><link href="/styles/site.css" rel="stylesheet"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head><body><header class="container" id="header"><div class="header"><div class="header-left"><div class="avatar"><img src="/images/avatar.png"></div><div class="author"><div class="author-name"><a href="/">Zhaogy233</a></div><div class="about-me">Hi~</div></div></div><div class="header-right"><ul class="navigation"><li><a href="/archives">归档</a></li></ul></div><div class="about-me-mask"><div class="about-me-wrap"><div class="about-me__header"><div class="avatar"><img src="/images/avatar.png"></div></div><ul class="socials"><li class="social-item"><span class="label"><img src="/images/socials/github.svg" alt="https://github.com/Zhaogy233"></span><a href="https://github.com/Zhaogy233" target="_blank" title="https://github.com/Zhaogy233">https://github.com/Zhaogy233</a></li><li class="social-item"><span class="label"><img src="/images/socials/email.svg" alt="3468482206@qq.com"></span><span>3468482206@qq.com</span></li><li class="social-item"><span class="label"><img src="/images/socials/wechat.svg" alt="z15566143013"></span><span>z15566143013</span></li></ul></div></div></div></header><div class="container post"><section class="article"><div class="title">Linux 线程并发</div><div class="date">写于2023-04-08T13:31:23+08:00</div><div class="content"><p>1.线程概念：一个正在运行的函数。<br>之前写的程序即便引入了信号的概念，也只是仅仅运行信号处理函数，而不运行现场函数(main).终究只有一个程序在跑。<br>posix线程是一套标准，而不是实现。<br>openmp线程标准<br>线程标识：pthread_t(不知道是什么类型,p指posix)<br>ps ax -l 查看进程线程关系，lwp是轻量级进程，可以理解为线程。</p>
+<p>2.信号与线程是解决异步信号的两种机制。</p>
+<p>3.函数<br>pthread_equal()用于比较两个线程id<br>pthread_self()获取当前线程的线程标识</p>
+<p>4.线程的创建<br>pthread_create(),eg:creat1.c<br>线程的调度取决于调度器策略</p>
+<p>5.线程的终止<br>三种方式：1.线程从启动例程中返回，返回值就是线程的退出码<br>    2.线程可以被同一进程中的其他线程取消<br>    3.线程调用pthread_exit()函数<br>pthread_exit()<br>pthread_join()相当于wait，但是不加这句话程序就直接exit(0)了</p>
+<p>5.栈的清理<br>pthread_cleanup_push()类似于挂载钩子函数<br>pthread_cleanup_pop()想使用上述功能，必须加上pop，参数为1时参加逆序调用，参数为0那就只弹栈而不调用。这个函数放在任何地方都可以，不过进程执行不到的时候参数默认为1.<br>这是一对宏，要成对出现<br>eg:cleanup.c</p>
+<p>6.线程的取消选项，正在运行的线程先取消才能收尸。<br>pthread_cancel()<br>取消有两种状态：允许和不允许<br>允许取消又分为：异步cancel和推迟cancel(默认)–&gt;推迟到cancel点再响应。<br>cancel点：posix定义的cancel点，都是可能引发阻塞的系统调用(调用结果返回之前，当前线程会被挂起)<br>pthread_setcanceltype()：设置取消方式<br>pthread_setcancelstate()：设置是否允许取消<br>pthread_testcancel():本函数什么都不做，就是一个cancel点</p>
+<p>7.线程分离<br>pthread_detach():创建一个线程，彻底不想管他，就把他detach出去，detach出去的线程无法再收回</p>
+<p>eg：用201个线程算质数primer.c</p>
+<p>8.线程之间共享代码段，但是每个线程都有自己的栈。但是内存空间是一定的，所以线程数也是一定的。可以通过ulimit把每个栈的空间变小，这样就能创建更多的线程。</p>
+<p>9.线程同步(解决add.c线程竞争的问题)<br>互斥量: pthread_mutex_t<br>pthread_mutex_destory(),这个函数总是报错<br>pthread_mutex_init()：动态初始化<br>pthread_mutex_t  mutext &#x3D;PTHREAD_MUTEX_INITIALIZER:静态初始化<br>pthread_mutex_lock()<br>pthread_mutex_trylock()：非阻塞等待<br>pthread_mutex_unlock()<br>eg:add.c ,abcd.c，使用线程池算质数primer_pool.c(error)<br>互斥量加锁解锁针对的是一段代码</p>
+<p>10.pthread_once指定某函数只执行一次<br>mytbf_posix(error)</p>
+<p>11.条件变量,用来通知当前条件变化的，用于解决互斥量的死等。这就是通知法原理。<br>pthread_cond_t<br>pthread_cond_init()<br>pthread_cond_destory()<br>pthread_cond_broadcast()<br>pthread_cond_signal()<br>pthread_cond_wait()等待signal或者broadcast，解锁等待<br>pthread_cond_timewait()<br>eg:修改mytbf_posix,primer_pool,abcd.c</p>
+<p>12.信号量<br>如果把互斥量比作bool类型，那么信号量就是int类型<br>eg：mysem使用互斥量和条件变量来模拟信号量。</p>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>下一篇：<a href="/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/">各种各样不报错的bug</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+<script src="/script/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<script src="/script/index.js"></script>
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-61220413-1', 'auto');
+ga('send', 'pageview');</script>
+<script src="/script/post.js"></script>
+</body></html>

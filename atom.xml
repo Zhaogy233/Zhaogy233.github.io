@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-04-05T07:27:09.253Z</updated>
+  <updated>2023-04-11T07:52:30.034Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,19 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux 线程并发</title>
+    <link href="http://example.com/2023/04/08/Linux-%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91/"/>
+    <id>http://example.com/2023/04/08/Linux-%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91/</id>
+    <published>2023-04-08T05:31:23.000Z</published>
+    <updated>2023-04-11T07:52:30.034Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.线程概念：一个正在运行的函数。<br>之前写的程序即便引入了信号的概念，也只是仅仅运行信号处理函数，而不运行现场函数(main).终究只有一个程序在跑。<br>posix线程是一套标准，而不是实现。<br>openmp线程标准<br>线程标识：pthread_t(不知道是什么类型,p指posix)<br>ps ax -l 查看进程线程关系，lwp是轻量级进程，可以理解为线程。</p><p>2.信号与线程是解决异步信号的两种机制。</p><p>3.函数<br>pthread_equal()用于比较两个线程id<br>pthread_self()获取当前线程的线程标识</p><p>4.线程的创建<br>pthread_create(),eg:creat1.c<br>线程的调度取决于调度器策略</p><p>5.线程的终止<br>三种方式：1.线程从启动例程中返回，返回值就是线程的退出码<br>    2.线程可以被同一进程中的其他线程取消<br>    3.线程调用pthread_exit()函数<br>pthread_exit()<br>pthread_join()相当于wait，但是不加这句话程序就直接exit(0)了</p><p>5.栈的清理<br>pthread_cleanup_push()类似于挂载钩子函数<br>pthread_cleanup_pop()想使用上述功能，必须加上pop，参数为1时参加逆序调用，参数为0那就只弹栈而不调用。这个函数放在任何地方都可以，不过进程执行不到的时候参数默认为1.<br>这是一对宏，要成对出现<br>eg:cleanup.c</p><p>6.线程的取消选项，正在运行的线程先取消才能收尸。<br>pthread_cancel()<br>取消有两种状态：允许和不允许<br>允许取消又分为：异步cancel和推迟cancel(默认)–&gt;推迟到cancel点再响应。<br>cancel点：posix定义的cancel点，都是可能引发阻塞的系统调用(调用结果返回之前，当前线程会被挂起)<br>pthread_setcanceltype()：设置取消方式<br>pthread_setcancelstate()：设置是否允许取消<br>pthread_testcancel():本函数什么都不做，就是一个cancel点</p><p>7.线程分离<br>pthread_detach():创建一个线程，彻底不想管他，就把他detach出去，detach出去的线程无法再收回</p><p>eg：用201个线程算质数primer.c</p><p>8.线程之间共享代码段，但是每个线程都有自己的栈。但是内存空间是一定的，所以线程数也是一定的。可以通过ulimit把每个栈的空间变小，这样就能创建更多的线程。</p><p>9.线程同步(解决add.c线程竞争的问题)<br>互斥量: pthread_mutex_t<br>pthread_mutex_destory(),这个函数总是报错<br>pthread_mutex_init()：动态初始化<br>pthread_mutex_t  mutext &#x3D;PTHREAD_MUTEX_INITIALIZER:静态初始化<br>pthread_mutex_lock()<br>pthread_mutex_trylock()：非阻塞等待<br>pthread_mutex_unlock()<br>eg:add.c ,abcd.c，使用线程池算质数primer_pool.c(error)<br>互斥量加锁解锁针对的是一段代码</p><p>10.pthread_once指定某函数只执行一次<br>mytbf_posix(error)</p><p>11.条件变量,用来通知当前条件变化的，用于解决互斥量的死等。这就是通知法原理。<br>pthread_cond_t<br>pthread_cond_init()<br>pthread_cond_destory()<br>pthread_cond_broadcast()<br>pthread_cond_signal()<br>pthread_cond_wait()等待signal或者broadcast，解锁等待<br>pthread_cond_timewait()<br>eg:修改mytbf_posix,primer_pool,abcd.c</p><p>12.信号量<br>如果把互斥量比作bool类型，那么信号量就是int类型<br>eg：mysem使用互斥量和条件变量来模拟信号量。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.线程概念：一个正在运行的函数。&lt;br&gt;之前写的程序即便引入了信号的概念，也只是仅仅运行信号处理函数，而不运行现场函数(main).终究只有一个程序在跑。&lt;br&gt;posix线程是一套标准，而不是实现。&lt;br&gt;openmp线程标准&lt;br&gt;线程标识：pthread_t(不知道</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>各种各样不报错的bug</title>
     <link href="http://example.com/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/"/>
     <id>http://example.com/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/</id>
     <published>2023-04-05T07:25:28.000Z</published>
-    <updated>2023-04-05T07:27:09.253Z</updated>
+    <updated>2023-04-09T00:53:42.151Z</updated>
     
-    <content type="html"><![CDATA[<p>1.在写while的条件语句时候，如果条件语句是个复杂的表达式，一定要梳理好括号之间的关系。(&#x3D;复制给谁后)再用&lt;与谁比较.</p>]]></content>
+    <content type="html"><![CDATA[<p>1.在写while的条件语句时候，如果条件语句是个复杂的表达式，一定要梳理好括号之间的关系。(&#x3D;复制给谁后)再用&lt;与谁比较.</p><p>2.在写if语句的时候判断是否相等，写一个&#x3D;不报错的，哭死。</p><p>3.使用makefile调试的时候如果没显示生成.o文件，那么那个对应的.c文件就有问题。</p><p>4.如果两个循环都使用同一变量i，最好把i在前面声明，不要再for内单独声明两次</p>]]></content>
     
     
       
       
     <summary type="html">&lt;p&gt;1.在写while的条件语句时候，如果条件语句是个复杂的表达式，一定要梳理好括号之间的关系。(&amp;#x3D;复制给谁后)再用&amp;lt;与谁比较.&lt;/p&gt;
-</summary>
+&lt;p&gt;2.在写if语句的时候判断是否相等，写一个&amp;#x3D;不报错的，哭死。&lt;/p&gt;
+&lt;p&gt;3.使用makefile调试的时</summary>
       
     
     
@@ -42,9 +63,9 @@
     <link href="http://example.com/2023/04/04/Linux-%E5%B9%B6%E5%8F%91/"/>
     <id>http://example.com/2023/04/04/Linux-%E5%B9%B6%E5%8F%91/</id>
     <published>2023-04-03T23:45:45.000Z</published>
-    <updated>2023-04-05T07:32:18.055Z</updated>
+    <updated>2023-04-08T03:48:25.807Z</updated>
     
-    <content type="html"><![CDATA[<p>并发分为两种：1.信号 2.线程 </p><p>所有例子写在lianxi - signal 目录下</p><p>1.什么使同步与异步<br>答：同步事件一切操作结果都已知，异步：什么时候发生什么事情不知道，发生某件事之后会产生什么结果不知道。</p><p>2.异步事件处理的常用方法<br>答：查询法(发生频率高)，通知法(发生频率稀疏)</p><p>3.信号的概念：信号使软件中断。但与中断有区别，中断是底层的硬件上的，而信号是软件上的应用层的。信号的响应依赖于中断。</p><p>4.signal<br>void (*signal(int signum,void(*func)(int))) (int); 这是一个返回类型是函数指针的函数声明，该函数的参数是一个int类型和一个函数指针。<br>这种写法比man手册中标准c写法好，这种少站一个名字，防止命名冲突<br>eg star.c<br>信号会打断阻塞的系统调用！！！所以以前写read，write的函数中报错的时候会把SIGINT当作错误设置errno为EINTR，要想使Ctrl+c不打断函数的打开和读写，就添加do while循环，使即便收到假错(Ctrl+c)也继续执行。<br>有图</p><p>5.用kill -l命令查看当前系统的所有信号<br>前31号为标准信号，34之后为实时信号</p><p>6.信号的行为不可靠：程序的执行现场是由内核布置的，有可能第一次还没执行结束就开始第二次调用，像递归但不是。</p><p>7.可重入函数，解决信号不可靠问题。<br>所有的系统调用都是可重入的函数(反过来不成立)，一部分库函数也是可重入的，如：memcpy，函数名_r(_r就是可重入的意思)，这些函数都可用于信号处理函数之中。</p><p>8.信号的响应过程<br>信号从收到到相应有一个不可避免的延迟<br>思考：如何忽略掉一个信号？SIG_IGN就是把指定的信号的mask位永远置为0.<br>思考：标准信号为什么会丢失？一次中断内来了10次同一信号，首先p置1-&gt;m&amp;p为1-&gt;m&#x3D;0,p&#x3D;0，此时再来9个信号-&gt;m&#x3D;0,p&#x3D;1,执行结束-&gt;m&#x3D;1,p&#x3D;1-&gt;再执行一次。所以来10次信号，就执行了2次。<br>标准信号的响应没有严格的顺序。<br>具体执行过程如下：<br>每一个进程都会维护一组位图，在信号响应过程中，一个进程会维护两个位图一个叫mask初始值32位1，一个叫pending初始32位0。<br>当程序执行过程中未收到信号的时候：程序运行时间片结束抱着现场扎入内核，保存地址用于返回，等待调度。当调度到来时系统会按位与mask&amp;pending，如果结果为0，说明没有信号到来，那么原路返回继续执行。<br>某一时刻收到信号：进程抱着现场扎内核，并将pending的某一位改为1，后进入等待状态，当调度到来时先mask&amp;pending发现某一位为1，此时不返回到原地址，此时把那一位mask与pending同时置0，之后进入signal函数的调用，把返回地址修改为你给的函数地址，等待执行结束后再次扎入内核，并将mask值修改为1，返回地址修改为原函数，再次调度后继续mask&amp;pending若结果为0，则继续执行原函数。</p><ol start="9"><li>kill()用来发信号的<br>raise()给当前进程发信号<br>alarm() eg：alarm.c，调用alarm(n)函数,会在n秒后发出SIGALRM信号，并执行后续代码，如果没有使用signal函数处理这个信号，程序会直接结束。<br>pause()是一个人为创造的阻塞系统调用，等待一个信号来调用它，非常适合与死循环搭配。当sleep由alarm和pasue封装的时候，最好不要用这个sleep。<br>综合eg：5sec.c，5sec_sig.c<br>gcc 5sec_sig.c -O1 这是优化的意思<br>gcc -S 5sec_sig.c 这是汇编的意思<br>漏桶流控实例eg：slowcat.c。漏桶的意思是即便来了十个数据也不紧不慢的每次读取10个。<br>令牌桶eg：slowcat2.c</li></ol><p>10.写一个令牌库，用于流量控制 mytbf。</p>]]></content>
+    <content type="html"><![CDATA[<p>并发分为两种：1.信号 2.线程 </p><p>所有例子写在lianxi - signal 目录下</p><p>1.什么使同步与异步<br>答：同步事件一切操作结果都已知，异步：什么时候发生什么事情不知道，发生某件事之后会产生什么结果不知道。</p><p>2.异步事件处理的常用方法<br>答：查询法(发生频率高)，通知法(发生频率稀疏)</p><p>3.信号的概念：信号使软件中断。但与中断有区别，中断是底层的硬件上的，而信号是软件上的应用层的。信号的响应依赖于中断。</p><p>4.signal<br>void (*signal(int signum,void(*func)(int))) (int); 这是一个返回类型是函数指针的函数声明，该函数的参数是一个int类型和一个函数指针。<br>这种写法比man手册中标准c写法好，这种少站一个名字，防止命名冲突<br>eg star.c<br>信号会打断阻塞的系统调用！！！所以以前写read，write的函数中报错的时候会把SIGINT当作错误设置errno为EINTR，要想使Ctrl+c不打断函数的打开和读写，就添加do while循环，使即便收到假错(Ctrl+c)也继续执行。<br>有图</p><p>5.用kill -l命令查看当前系统的所有信号<br>前31号为标准信号，34之后为实时信号</p><p>6.信号的行为不可靠：程序的执行现场是由内核布置的，有可能第一次还没执行结束就开始第二次调用，像递归但不是。</p><p>7.可重入函数，解决信号不可靠问题。<br>所有的系统调用都是可重入的函数(反过来不成立)，一部分库函数也是可重入的，如：memcpy，函数名_r(_r就是可重入的意思)，这些函数都可用于信号处理函数之中。</p><p>8.信号的响应过程<br>信号从收到到相应有一个不可避免的延迟<br>思考：如何忽略掉一个信号？SIG_IGN就是把指定的信号的mask位永远置为0.<br>思考：标准信号为什么会丢失？一次中断内来了10次同一信号，首先p置1-&gt;m&amp;p为1-&gt;m&#x3D;0,p&#x3D;0，此时再来9个信号-&gt;m&#x3D;0,p&#x3D;1,执行结束-&gt;m&#x3D;1,p&#x3D;1-&gt;再执行一次。所以来10次信号，就执行了2次。<br>标准信号的响应没有严格的顺序。<br>具体执行过程如下：<br>每一个进程都会维护一组位图，在信号响应过程中，一个进程会维护两个位图一个叫mask初始值32位1，一个叫pending初始32位0。<br>当程序执行过程中未收到信号的时候：程序运行时间片结束抱着现场扎入内核，保存地址用于返回，等待调度。当调度到来时系统会按位与mask&amp;pending，如果结果为0，说明没有信号到来，那么原路返回继续执行。<br>某一时刻收到信号：进程抱着现场扎内核，并将pending的某一位改为1，后进入等待状态，当调度到来时先mask&amp;pending发现某一位为1，此时不返回到原地址，此时把那一位mask与pending同时置0，之后进入signal函数的调用，把返回地址修改为你给的函数地址，等待执行结束后再次扎入内核，并将mask值修改为1，返回地址修改为原函数，再次调度后继续mask&amp;pending若结果为0，则继续执行原函数。<br>程序不能从信号处理函数中随意的往外跳（sigsetjmp，siglongjmp），这样会错过回main时最后把mask修改为1的机会。<br>9.<br>kill()用来发信号的<br>raise()给当前进程发信号<br>alarm() eg：alarm.c，调用alarm(n)函数,会在n秒后发出SIGALRM信号，并执行后续代码，如果没有使用signal函数处理这个信号，程序会直接结束。<br>pause()是一个人为创造的阻塞系统调用，等待一个信号来调用它，非常适合与死循环搭配。当sleep由alarm和pasue封装的时候，最好不要用这个sleep。因为一个程序出现两个alarm会出错。<br>综合eg：5sec.c，5sec_sig.c<br>gcc 5sec_sig.c -O1 这是优化的意思<br>gcc -S 5sec_sig.c 这是汇编的意思<br>漏桶流控实例eg：slowcat.c。漏桶的意思是即便来了十个数据也不紧不慢的每次读取10个。<br>令牌桶eg：slowcat2.c</p><p>10.写一个令牌库，用于流量控制<br>eg: mytbf。</p><p>11.使用单一计时器，构造一组函数，实现任意数量的计时器。<br>eg: anytimer</p><p>12.setitimer(),这个函数也是用来实现定时的，但是比alarm更精确，对it_value倒计时，倒计时结束后把it_value的值重置为it_interval<br>it_interval.tv_sec:这个用来指定多少秒<br>it_interval.tv_usec:这个用来指定微秒<br>上述两者加起来就是要指定第一回延迟后每次延迟的时间</p><p>13.abort()<br>人为制造一个异常，杀掉当前进程，得到core dump现场</p><p>14.system()<br>在有信号参与的程序当中，要阻塞住一个信号，要忽略掉两个信号。</p><p>15.休眠函数<br>sleep(),nanosleep(),usleep(),select()</p><p>16.信号集<br>信号集类型:sigset_t<br>sigemptyset()<br>sigfillset()<br>sigaddset()<br>sigdelset()<br>sigismember()</p><p>17.信号屏蔽字<br>sigprocmask()人为决定信号什么时候被响应<br>16与17的eg:block.c</p><p>18.扩展<br>sigsuspend(),用信号驱动程序。eg:susp.c<br>sigaction(),非常重要，用来替换signal函数。eg:siga.c，用sigaction改mytbf，让其只接收kernel信号，防止被攻击出错。<br>命令kill -ALRM pid:给pid发送ALRM信号<br>bit mask就是位图的意思</p><p>19.实时信号<br>先响应标准信号(无序会丢失)，再响应实时信号(有序排队，不丢失)<br>eg:susp_rt.c 使用kill -40 pid给进程发信号来测试，只能时40因为用的信号是34+6<br>实时信号队列一共可以存储几个信号，使用ulimit -a查询pending signals</p>]]></content>
     
     
       
@@ -85,9 +106,9 @@
     <link href="http://example.com/2023/03/29/Linux-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/"/>
     <id>http://example.com/2023/03/29/Linux-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/</id>
     <published>2023-03-29T03:49:19.000Z</published>
-    <updated>2023-03-30T06:25:42.857Z</updated>
+    <updated>2023-04-06T02:44:21.001Z</updated>
     
-    <content type="html"><![CDATA[<p>1.进程的终止有几种情况？分别是什么？<br>正常的终止<br>    从main函数返回<br>    调用exit<br>    调用_exit或_Exit<br>    最后一个线程从其启动例程返回<br>    最后一个线程调用pthread_exit</p><p>异常终止<br>    调用abort<br>    接到一个信号并终止<br>    最后一个线程对其取消请求做出相应</p><p>2.main函数返回值给谁看的？<br>答：给父进程看的，在linux环境下一般程序的父进程时shell，可以用echo $?打印上一个可执行程序的返回值。</p><p>3.什么是钩子函数？<br>atexti()函数是钩子函数，类似c++中的析构函数，用来挂载要释放的空间或关闭文件，调用exit时会逆序调用所有函数。<br>但是调用_exit()时会直接终止程序，不调用钩子函数也不执行IO清理，一般在程序出错的时候，比如写越界的时候调用_exit()，为了即时终止程序，防止问题扩大，也可以调用abort()阻止污染扩散。<br>写一个函数atexit.c解释钩子函数。atexit函数要自己定义，在man手册中把atexit换成自己要写的函数名即可，函数内容也是自己写。，但是在调用的时候要用atexit(自定义函数的函数名)</p><p>4.命令行参数解析<br>getopt(),该函数的第三个参数opstring是命令行选项的意思但是不带-;<br>getopt_long();<br>用这俩函数写一个mydate.c可以用-y:year,-m:month,-d:day,-H:hour,-M:minute,-S:second，显示想要的信息<br>当getopt函数的第三个参数后面！加冒号的时候，说明该选项可以附加条件，命令行传参是该参数后面的串默认传入char * optarg(这个变量是全局变量，已经定义好的)中，这个附加条件是给程序员看的，程序员根据这个附加条件去写相应的功能<br>man手册中用extern定义的变量都是全局变量<br>在optstring中如果不加-,函数不认识非选项传参(路径，名称等)，加-后可以识别，且返回值为1。非选项参数的位置是optind-1.</p><p>5.用export来查看环境变量，一个目录下的环境变量被更改不影响其他目录，环境变量的格式是key&#x3D;value，value的值改变，命令行也会发生改变。</p><p>6.bin表示的是二进制文件，所有的二进制文件会在环境变量的path路径中。</p><p>7.environ是char**类型与argv一样，里面存放着所有的环境变量，与argv不同的是environ没有像argc一样的计数器，故在写循环的时候要把循环推出条件写为environ[i]!&#x3D;NULL; 用extern char ** environ;声明。<br>getenv(),向你要关键字，返回一个value值。<br>setenv(),如果key存在就改变，如果key不存在就添加,overwrite为真就覆盖，否则不覆盖。</p><p>8.命令ps axf查看当前进程关系，可得到进程号，命令 pmap + 进程号，看内存空间分布情况。</p><p>9.man手册中小心link with，这句话意味着你在链接的时候要加上某项。</p><p>10.在打开方式的参数中，有_lazy懒惰方式，意思是用的时候在打开。</p><p>11.如何理解 man手册中的double (*cosine) (double)？<br>答：(*cosine)意味着cosine是指向函数的指针，函数参数和返回值都是double</p><p>12.如何理解*(void ** )( &amp;cosine)?<br>答：cosine是函数指针，取地址变为二级指针，强转为void*<em>，后解引用为void</em></p><p>13.函数跳转，随着main函数的调用不断有函数压栈，当到达目标栈时，得到数据后想要直接回到初始状态，而非一层层弹栈的话，需要以下函数比goto安全。<br>setjmp()，设置跳转点，如果正在设置跳转点，返回值为0，如果从longjmp返回，那么返回值非0，参数位全局变量，该函数是执行一次返回两次的函数。<br>longjmp()，从哪个位置跳回某跳转点 ，第二个参数位该函数要带回去的内容<br>__FUNCTION__是由gcc提供的宏，用来调试程序，会自动识别。<br>利用上述函数写函数jump.c来练习。</p><p>14.资源的获取及控制<br>getrlimit(),用来获取资源总量<br>setrlimit()。用来设置资源总量<br>上述两个函数封装位ulimit</p>]]></content>
+    <content type="html"><![CDATA[<p>1.进程的终止有几种情况？分别是什么？<br>正常的终止<br>    从main函数返回<br>    调用exit<br>    调用_exit或_Exit<br>    最后一个线程从其启动例程返回<br>    最后一个线程调用pthread_exit</p><p>异常终止<br>    调用abort<br>    接到一个信号并终止<br>    最后一个线程对其取消请求做出相应</p><p>2.main函数返回值给谁看的？<br>答：给父进程看的，在linux环境下一般程序的父进程时shell，可以用echo $?打印上一个可执行程序的返回值。</p><p>3.什么是钩子函数？<br>atexti()函数是钩子函数，类似c++中的析构函数，用来挂载要释放的空间或关闭文件，调用exit时会逆序调用所有钩子函数。<br>但是调用_exit()时会直接终止程序，不调用钩子函数也不执行IO清理，一般在程序出错的时候，比如写越界的时候调用_exit()，为了即时终止程序，防止问题扩大，也可以调用abort()阻止污染扩散。<br>写一个函数atexit.c解释钩子函数。atexit函数要自己定义，在man手册中把atexit换成自己要写的函数名即可，函数内容也是自己写。，但是在调用的时候要用atexit(自定义函数的函数名)</p><p>4.命令行参数解析<br>getopt(),该函数的第三个参数opstring是命令行选项的意思但是不带-;<br>getopt_long();<br>用这俩函数写一个mydate.c可以用-y:year,-m:month,-d:day,-H:hour,-M:minute,-S:second，显示想要的信息<br>当getopt函数的第三个参数后面！加冒号的时候，说明该选项可以附加条件，命令行传参是该参数后面的串默认传入char * optarg(这个变量是全局变量，已经定义好的)中，这个附加条件是给程序员看的，程序员根据这个附加条件去写相应的功能<br>man手册中用extern定义的变量都是全局变量<br>在optstring中如果不加-,函数不认识非选项传参(路径，名称等)，加-后可以识别，且返回值为1。非选项参数的位置是optind-1.</p><p>5.用export来查看环境变量，一个目录下的环境变量被更改不影响其他目录，环境变量的格式是key&#x3D;value，value的值改变，命令行也会发生改变。</p><p>6.bin表示的是二进制文件，所有的二进制文件会在环境变量的path路径中。</p><p>7.environ是char**类型与argv一样，里面存放着所有的环境变量，与argv不同的是environ没有像argc一样的计数器，故在写循环的时候要把循环推出条件写为environ[i]!&#x3D;NULL; 用extern char ** environ;声明。<br>getenv(),向你要关键字，返回一个value值。<br>setenv(),如果key存在就改变，如果key不存在就添加,overwrite为真就覆盖，否则不覆盖。</p><p>8.命令ps axf查看当前进程关系，可得到进程号，命令 pmap + 进程号，看内存空间分布情况。</p><p>9.man手册中小心link with，这句话意味着你在链接的时候要加上某项。</p><p>10.在打开方式的参数中，有_lazy懒惰方式，意思是用的时候在打开。</p><p>11.如何理解 man手册中的double (*cosine) (double)？<br>答：(*cosine)意味着cosine是指向函数的指针，函数参数和返回值都是double</p><p>12.如何理解*(void ** )( &amp;cosine)?<br>答：cosine是函数指针，取地址变为二级指针，强转为void*<em>，后解引用为void</em></p><p>13.函数跳转，随着main函数的调用不断有函数压栈，当到达目标栈时，得到数据后想要直接回到初始状态，而非一层层弹栈的话，需要以下函数比goto安全。<br>setjmp()，设置跳转点，如果正在设置跳转点，返回值为0，如果从longjmp返回，那么返回值非0，参数位全局变量，该函数是执行一次返回两次的函数。<br>longjmp()，从哪个位置跳回某跳转点 ，第二个参数位该函数要带回去的内容<br>__FUNCTION__是由gcc提供的宏，用来调试程序，会自动识别。<br>利用上述函数写函数jump.c来练习。</p><p>14.资源的获取及控制<br>getrlimit(),用来获取资源总量<br>setrlimit()。用来设置资源总量<br>上述两个函数封装位ulimit</p>]]></content>
     
     
       
@@ -252,9 +273,9 @@
     <link href="http://example.com/2023/03/15/linux-%E5%91%BD%E4%BB%A4/"/>
     <id>http://example.com/2023/03/15/linux-%E5%91%BD%E4%BB%A4/</id>
     <published>2023-03-15T01:46:52.000Z</published>
-    <updated>2023-03-29T04:22:51.089Z</updated>
+    <updated>2023-04-10T23:32:17.909Z</updated>
     
-    <content type="html"><![CDATA[<ol><li>-a 与 -r有什么区别？<br>答：-a是以全部的方式(cp)或显示隐藏文件(ls)，-r是以递归的方式。例如在cp拷贝的过程中：使用-a会把原来的时间也拷贝过来，但用-r就会以拷贝的时间作为新文件最后使用的时间。</li></ol><p>2.hello.*是什么意思？<br>答：是以hello.为前缀的所有文件。eg：hello.cpp,  hello.c,  hello.java</p><p>3.cat的用法？<br>答：一：显示文件内容。二：单写cat可以实现你写一行命令，系统复制一遍再输出的操作，也称作回显。三：可以用tac倒着输出文件内容。</p><ol start="4"><li>-atime   按照访问时间attand<br> -mtime 按照修改属性时间modify<br> -ctime   按照修改文件时间change</li></ol><p>5.umask是干什么的？<br>答：它为touch的新文件提供掩码，该掩码作用于文件属性rwx，但是os默认新建文件没有执行能力，故没有x，所以rwx+111+掩码&#x3D;777,但可以自定义掩码：umask 511.只要新文件仍然没有可执行能力就可以。</p><p>6.Ctrl+alt+t：创建新终端，可以一边看代码，一边调试。<br>Ctrl+shift+t：另起一页终端，用alt1、2、3、4进行切换。</p><p>7.-n显示行号，或者再makefile中意味着模拟执行。</p><p>8.ldd a.out是什么意思？<br>答：查看a.out所需要的动态库的路径。</p><p>9.链接器与动态链接器的区别？<br>答：链接器用来合并数据段与地址回填。而动态链接器用来加载动态库。</p><p>10.-rm -rf为什么rm前加-？<br>答：在rm前加-代表出错误依旧执行的意思。</p><ol start="11"><li>–是长格式命令选项有利于避免冲突，方便记忆，并且–也能表示传参结束，后面加非传参选项</li></ol>]]></content>
+    <content type="html"><![CDATA[<ol><li>-a 与 -r有什么区别？<br>答：-a是以全部的方式(cp)或显示隐藏文件(ls)，-r是以递归的方式。例如在cp拷贝的过程中：使用-a会把原来的时间也拷贝过来，但用-r就会以拷贝的时间作为新文件最后使用的时间。</li></ol><p>2.hello.*是什么意思？<br>答：是以hello.为前缀的所有文件。eg：hello.cpp,  hello.c,  hello.java</p><p>3.cat的用法？<br>答：一：显示文件内容。二：单写cat可以实现你写一行命令，系统复制一遍再输出的操作，也称作回显。三：可以用tac倒着输出文件内容。</p><ol start="4"><li>-atime   按照访问时间attand<br> -mtime 按照修改属性时间modify<br> -ctime   按照修改文件时间change</li></ol><p>5.umask是干什么的？<br>答：它为touch的新文件提供掩码，该掩码作用于文件属性rwx，但是os默认新建文件没有执行能力，故没有x，所以rwx+111+掩码&#x3D;777,但可以自定义掩码：umask 511.只要新文件仍然没有可执行能力就可以。</p><p>6.Ctrl+alt+t：创建新终端，可以一边看代码，一边调试。<br>Ctrl+shift+t：另起一页终端，用alt1、2、3、4进行切换。</p><p>7.-n显示行号，或者再makefile中意味着模拟执行。</p><p>8.ldd a.out是什么意思？<br>答：查看a.out所需要的动态库的路径。</p><p>9.链接器与动态链接器的区别？<br>答：链接器用来合并数据段与地址回填。而动态链接器用来加载动态库。</p><p>10.-rm -rf为什么rm前加-？<br>答：在rm前加-代表出错误依旧执行的意思。</p><ol start="11"><li>–是长格式命令选项有利于避免冲突，方便记忆，并且–也能表示传参结束，后面加非传参选项</li></ol><p>12.vi * -p一次性编译所有文件</p>]]></content>
     
     
       
@@ -411,27 +432,6 @@
       
     <summary type="html">&lt;p&gt;1.this指针如何解决命名冲突的问题？&lt;br&gt;答：由于命名不规范导致成员函数内的参数名与类内成员名相同，进而调用成员函数给类内成员赋值时导致命名冲突，此时可使用this指针指向成员。this指向的永远是调用成员函数的对象。&lt;/p&gt;
 &lt;p&gt;2.如何理解返回this*时要求函</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>day 7</title>
-    <link href="http://example.com/2023/02/26/C++6/"/>
-    <id>http://example.com/2023/02/26/C++6/</id>
-    <published>2023-02-26T01:18:51.000Z</published>
-    <updated>2023-03-11T10:06:37.863Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.拷贝构造函数的第二种调用时机？<br>答：利用函数的值传递方式，这样操作会拷贝一份传入的对象，此时调用了拷贝构造函数。</p><p>2.拷贝构造函数的第三种调用时机？<br>答：利用函数返回值（为对象）返回局部变量的时候会调用拷贝构造，因为局部变量随着函数结束而销毁，但是返回值要求是对象，故只能拷贝生成新对象返回。</p><p>3.浅拷贝的定义以及带来的问题？<br>答：浅拷贝就是编译器提供的默认拷贝，由于栈的特性“先进后出”，一旦函数体内包含两个对象且对象里包含堆区指针，在调用析构函数时（包含delete）就会出现堆区内存重复释放的问题。</p><p>4.如何解决深拷贝带来的问题？<br>答：自己写构造函数，用new新建堆区内存代替原来直接赋值的操作。</p><p>5.本类中有其它类的对象时，时先构造哪个类，先析构哪个类？<br>答：先构造其他类的对象，在构造本身。析构恰恰相反，先析构本身。</p><p>6.如何理解静态成员变量中的“类内声明，类外初始化”？<br>答：声明就是定义个变量的意思，没有赋值操作，在类定义的外面才有初始化也就是赋值的操作。</p><p>7.由于静态成员变量是所有对象共有的所以除了用对象进行访问还可以怎么访问？<br>答：还可以用：“类名：：静态成员变量”，的方式访问。</p><p>8.为什么静态成员函数只能访问静态成员变量？<br>答：因为在类定义中的非静态成员变量不知道是哪个对象调用的。</p><p>9.当函数传递的参数为类的时候，为什么要使用引用？<br>答：使用引用会防止拷贝构造的出现。因为在函数内要生成局部变量，如果不传引用，那么就要创建对象，此时会调用拷贝构造。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.拷贝构造函数的第二种调用时机？&lt;br&gt;答：利用函数的值传递方式，这样操作会拷贝一份传入的对象，此时调用了拷贝构造函数。&lt;/p&gt;
-&lt;p&gt;2.拷贝构造函数的第三种调用时机？&lt;br&gt;答：利用函数返回值（为对象）返回局部变量的时候会调用拷贝构造，因为局部变量随着函数结束而销毁，</summary>
       
     
     
