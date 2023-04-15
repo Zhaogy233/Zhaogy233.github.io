@@ -13,7 +13,14 @@
 <p>10.pthread_once指定某函数只执行一次<br>mytbf_posix(error)</p>
 <p>11.条件变量,用来通知当前条件变化的，用于解决互斥量的死等。这就是通知法原理。<br>pthread_cond_t<br>pthread_cond_init()<br>pthread_cond_destory()<br>pthread_cond_broadcast()<br>pthread_cond_signal()<br>pthread_cond_wait()等待signal或者broadcast，解锁等待<br>pthread_cond_timewait()<br>eg:修改mytbf_posix,primer_pool,abcd.c</p>
 <p>12.信号量<br>如果把互斥量比作bool类型，那么信号量就是int类型<br>eg：mysem使用互斥量和条件变量来模拟信号量。</p>
-</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>下一篇：<a href="/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/">各种各样不报错的bug</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+<p>13.读写锁<br>读锁r-&gt;共享锁<br>写锁w-&gt;互斥锁<br>写者饿死问题</p>
+<p>14.线程属性<br>pthread_attr_init()<br>pthread_attr_destory()</p>
+<p>15.互斥量属性<br>pthread_mutexattr_init()<br>pthread_mutexattr_destory()<br>pthread_mutexattr_getpshared():getpshared中的p指的是process，跨进程起作用的意思。<br>pthread_mutexattr_setpshared()<br>clone()创建一个既不是子进程也不是兄弟线程的东西<br>不占用时解锁：这把锁不是你加的但是你想解锁<br>pthread_mutexattr_gettype()<br>pthread_mutexattr_settype()</p>
+<p>16.条件变量属性<br>pthread_condarrt_init()<br>pthread_condarrt_destory()</p>
+<p>17.读写锁属性</p>
+<p>18.重入<br>多线程io<br>线程与信号：之前讲的进程响应信号的机制只是单进程单线程，学习了线程之后，才知道真是的进程只有一个pending，而线程有pending与mask，扎回main的时候mask要既与线程pengding与，又要与进程pending与<br>  pthread_sigmask()<br>  sigwait()<br>  pthread_kill()<br>线程和fork：当一个进程有三个线程，此时创建子进程，子进程有几个线程?不同线程原语对fork出的进程结果不一样</p>
+<p>19.openmp线程标准-&gt;<a target="_blank" rel="noopener" href="http://www.openmp.org/">www.OpenMP.org</a></p>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/04/12/Linux-%E9%AB%98%E7%BA%A7IO/">Linux 高级IO</a></li><li>下一篇：<a href="/2023/04/05/%E5%90%84%E7%A7%8D%E5%90%84%E6%A0%B7%E4%B8%8D%E6%8A%A5%E9%94%99%E7%9A%84bug/">各种各样不报错的bug</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
 <script src="/script/jquery.min.js"></script>
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">

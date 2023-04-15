@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-04-11T07:52:30.034Z</updated>
+  <updated>2023-04-15T04:45:59.603Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,68 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux 进程间通信</title>
+    <link href="http://example.com/2023/04/15/Linux-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/"/>
+    <id>http://example.com/2023/04/15/Linux-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/</id>
+    <published>2023-04-15T04:45:59.000Z</published>
+    <updated>2023-04-15T04:45:59.603Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 管道</title>
+    <link href="http://example.com/2023/04/15/Linux-%E7%AE%A1%E9%81%93/"/>
+    <id>http://example.com/2023/04/15/Linux-%E7%AE%A1%E9%81%93/</id>
+    <published>2023-04-15T01:38:37.000Z</published>
+    <updated>2023-04-15T04:45:35.479Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.管道即顺序存储的循环队列。</p><p>2.线程间通信自己创建管道，进程间通信使用系统调用。为什么线程间通信要自己创建？<br>答：因为系统调用要进入kernel态，但是两个线程都在同一进程空间内，没必要多此一举<br>eg:mypipe</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.管道即顺序存储的循环队列。&lt;/p&gt;
+&lt;p&gt;2.线程间通信自己创建管道，进程间通信使用系统调用。为什么线程间通信要自己创建？&lt;br&gt;答：因为系统调用要进入kernel态，但是两个线程都在同一进程空间内，没必要多此一举&lt;br&gt;eg:mypipe&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 高级IO</title>
+    <link href="http://example.com/2023/04/12/Linux-%E9%AB%98%E7%BA%A7IO/"/>
+    <id>http://example.com/2023/04/12/Linux-%E9%AB%98%E7%BA%A7IO/</id>
+    <published>2023-04-12T02:20:00.000Z</published>
+    <updated>2023-04-14T09:18:00.638Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.非阻塞IO<br>简单流程：自然流程是结构化的<br>复杂流程：自然流程不是结构化的(使用选择，循环，if不能简单的描述出来，必须要用到跳转goto等)<br>eg:nonblock 使用有限状态机实现数据中继(重构mycopy)<br>eg:中继引擎relayer,两对中继器互不干扰<br>2.linux画图工具dia</p><p>3.IO多路转接：对于IO密集型的代码，用它来监视文件描述符的行为。<br>类型fd_set为文件描述符的集合</p><p>select(int nfds,读集,写集,异常集,struct timeval * timeout );nfds是你所监视的文件描述符中最大的那个再加一,如果不设置timeout那就是阻塞的状态，等到感兴趣的事件发生才开始调用,这就是非忙等的状态机<br>优点：可移植性好<br>缺点：一.参数类型nfds不能超过整型最大范围，二.集合没有const修饰一旦成功匹配一个fd，所有集合都被清空，三.监视事件太单一<br>eg:select.c</p><p>poll();user态<br>结构体pollfd中的events与revents都是位图，用或的方式赋值，用与的方式取值<br>eg:poll.c</p><p>epoll();kernel态<br>eg:epoll.c<br>类型uint32_t为无符号32位整型数</p><p>4.其他读写函数<br>readv()<br>writev()<br>相比于read，write一次只能发送一个IO请求，并将数据读写到一个指定的缓冲区，readv与writev可一次性指定多个缓冲区读写，<br>eg:rwv.c</p><p>5.存储映射IO<br>mmap()<br>munmap()<br>如果mmap使用匿名方式，那么可以当成malloc使用，此时的munmap可以当成free使用<br>eg:mmap.c<br>有亲缘关系的进程间通信：先mmap，再fork，这样父子进程就可以通过映射的空间通信，即共享内存eg:sharemem.c</p><p>6.文件锁<br>fcntl()<br>lockf()<br>flock()<br>有时候close关闭文件会意外解锁，因为文件锁锁住的是inode，eg:flock.c</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1.非阻塞IO&lt;br&gt;简单流程：自然流程是结构化的&lt;br&gt;复杂流程：自然流程不是结构化的(使用选择，循环，if不能简单的描述出来，必须要用到跳转goto等)&lt;br&gt;eg:nonblock 使用有限状态机实现数据中继(重构mycopy)&lt;br&gt;eg:中继引擎relayer,两</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Linux 线程并发</title>
     <link href="http://example.com/2023/04/08/Linux-%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91/"/>
     <id>http://example.com/2023/04/08/Linux-%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91/</id>
     <published>2023-04-08T05:31:23.000Z</published>
-    <updated>2023-04-11T07:52:30.034Z</updated>
+    <updated>2023-04-12T02:02:19.779Z</updated>
     
-    <content type="html"><![CDATA[<p>1.线程概念：一个正在运行的函数。<br>之前写的程序即便引入了信号的概念，也只是仅仅运行信号处理函数，而不运行现场函数(main).终究只有一个程序在跑。<br>posix线程是一套标准，而不是实现。<br>openmp线程标准<br>线程标识：pthread_t(不知道是什么类型,p指posix)<br>ps ax -l 查看进程线程关系，lwp是轻量级进程，可以理解为线程。</p><p>2.信号与线程是解决异步信号的两种机制。</p><p>3.函数<br>pthread_equal()用于比较两个线程id<br>pthread_self()获取当前线程的线程标识</p><p>4.线程的创建<br>pthread_create(),eg:creat1.c<br>线程的调度取决于调度器策略</p><p>5.线程的终止<br>三种方式：1.线程从启动例程中返回，返回值就是线程的退出码<br>    2.线程可以被同一进程中的其他线程取消<br>    3.线程调用pthread_exit()函数<br>pthread_exit()<br>pthread_join()相当于wait，但是不加这句话程序就直接exit(0)了</p><p>5.栈的清理<br>pthread_cleanup_push()类似于挂载钩子函数<br>pthread_cleanup_pop()想使用上述功能，必须加上pop，参数为1时参加逆序调用，参数为0那就只弹栈而不调用。这个函数放在任何地方都可以，不过进程执行不到的时候参数默认为1.<br>这是一对宏，要成对出现<br>eg:cleanup.c</p><p>6.线程的取消选项，正在运行的线程先取消才能收尸。<br>pthread_cancel()<br>取消有两种状态：允许和不允许<br>允许取消又分为：异步cancel和推迟cancel(默认)–&gt;推迟到cancel点再响应。<br>cancel点：posix定义的cancel点，都是可能引发阻塞的系统调用(调用结果返回之前，当前线程会被挂起)<br>pthread_setcanceltype()：设置取消方式<br>pthread_setcancelstate()：设置是否允许取消<br>pthread_testcancel():本函数什么都不做，就是一个cancel点</p><p>7.线程分离<br>pthread_detach():创建一个线程，彻底不想管他，就把他detach出去，detach出去的线程无法再收回</p><p>eg：用201个线程算质数primer.c</p><p>8.线程之间共享代码段，但是每个线程都有自己的栈。但是内存空间是一定的，所以线程数也是一定的。可以通过ulimit把每个栈的空间变小，这样就能创建更多的线程。</p><p>9.线程同步(解决add.c线程竞争的问题)<br>互斥量: pthread_mutex_t<br>pthread_mutex_destory(),这个函数总是报错<br>pthread_mutex_init()：动态初始化<br>pthread_mutex_t  mutext &#x3D;PTHREAD_MUTEX_INITIALIZER:静态初始化<br>pthread_mutex_lock()<br>pthread_mutex_trylock()：非阻塞等待<br>pthread_mutex_unlock()<br>eg:add.c ,abcd.c，使用线程池算质数primer_pool.c(error)<br>互斥量加锁解锁针对的是一段代码</p><p>10.pthread_once指定某函数只执行一次<br>mytbf_posix(error)</p><p>11.条件变量,用来通知当前条件变化的，用于解决互斥量的死等。这就是通知法原理。<br>pthread_cond_t<br>pthread_cond_init()<br>pthread_cond_destory()<br>pthread_cond_broadcast()<br>pthread_cond_signal()<br>pthread_cond_wait()等待signal或者broadcast，解锁等待<br>pthread_cond_timewait()<br>eg:修改mytbf_posix,primer_pool,abcd.c</p><p>12.信号量<br>如果把互斥量比作bool类型，那么信号量就是int类型<br>eg：mysem使用互斥量和条件变量来模拟信号量。</p>]]></content>
+    <content type="html"><![CDATA[<p>1.线程概念：一个正在运行的函数。<br>之前写的程序即便引入了信号的概念，也只是仅仅运行信号处理函数，而不运行现场函数(main).终究只有一个程序在跑。<br>posix线程是一套标准，而不是实现。<br>openmp线程标准<br>线程标识：pthread_t(不知道是什么类型,p指posix)<br>ps ax -l 查看进程线程关系，lwp是轻量级进程，可以理解为线程。</p><p>2.信号与线程是解决异步信号的两种机制。</p><p>3.函数<br>pthread_equal()用于比较两个线程id<br>pthread_self()获取当前线程的线程标识</p><p>4.线程的创建<br>pthread_create(),eg:creat1.c<br>线程的调度取决于调度器策略</p><p>5.线程的终止<br>三种方式：1.线程从启动例程中返回，返回值就是线程的退出码<br>    2.线程可以被同一进程中的其他线程取消<br>    3.线程调用pthread_exit()函数<br>pthread_exit()<br>pthread_join()相当于wait，但是不加这句话程序就直接exit(0)了</p><p>5.栈的清理<br>pthread_cleanup_push()类似于挂载钩子函数<br>pthread_cleanup_pop()想使用上述功能，必须加上pop，参数为1时参加逆序调用，参数为0那就只弹栈而不调用。这个函数放在任何地方都可以，不过进程执行不到的时候参数默认为1.<br>这是一对宏，要成对出现<br>eg:cleanup.c</p><p>6.线程的取消选项，正在运行的线程先取消才能收尸。<br>pthread_cancel()<br>取消有两种状态：允许和不允许<br>允许取消又分为：异步cancel和推迟cancel(默认)–&gt;推迟到cancel点再响应。<br>cancel点：posix定义的cancel点，都是可能引发阻塞的系统调用(调用结果返回之前，当前线程会被挂起)<br>pthread_setcanceltype()：设置取消方式<br>pthread_setcancelstate()：设置是否允许取消<br>pthread_testcancel():本函数什么都不做，就是一个cancel点</p><p>7.线程分离<br>pthread_detach():创建一个线程，彻底不想管他，就把他detach出去，detach出去的线程无法再收回</p><p>eg：用201个线程算质数primer.c</p><p>8.线程之间共享代码段，但是每个线程都有自己的栈。但是内存空间是一定的，所以线程数也是一定的。可以通过ulimit把每个栈的空间变小，这样就能创建更多的线程。</p><p>9.线程同步(解决add.c线程竞争的问题)<br>互斥量: pthread_mutex_t<br>pthread_mutex_destory(),这个函数总是报错<br>pthread_mutex_init()：动态初始化<br>pthread_mutex_t  mutext &#x3D;PTHREAD_MUTEX_INITIALIZER:静态初始化<br>pthread_mutex_lock()<br>pthread_mutex_trylock()：非阻塞等待<br>pthread_mutex_unlock()<br>eg:add.c ,abcd.c，使用线程池算质数primer_pool.c(error)<br>互斥量加锁解锁针对的是一段代码</p><p>10.pthread_once指定某函数只执行一次<br>mytbf_posix(error)</p><p>11.条件变量,用来通知当前条件变化的，用于解决互斥量的死等。这就是通知法原理。<br>pthread_cond_t<br>pthread_cond_init()<br>pthread_cond_destory()<br>pthread_cond_broadcast()<br>pthread_cond_signal()<br>pthread_cond_wait()等待signal或者broadcast，解锁等待<br>pthread_cond_timewait()<br>eg:修改mytbf_posix,primer_pool,abcd.c</p><p>12.信号量<br>如果把互斥量比作bool类型，那么信号量就是int类型<br>eg：mysem使用互斥量和条件变量来模拟信号量。</p><p>13.读写锁<br>读锁r-&gt;共享锁<br>写锁w-&gt;互斥锁<br>写者饿死问题</p><p>14.线程属性<br>pthread_attr_init()<br>pthread_attr_destory()</p><p>15.互斥量属性<br>pthread_mutexattr_init()<br>pthread_mutexattr_destory()<br>pthread_mutexattr_getpshared():getpshared中的p指的是process，跨进程起作用的意思。<br>pthread_mutexattr_setpshared()<br>clone()创建一个既不是子进程也不是兄弟线程的东西<br>不占用时解锁：这把锁不是你加的但是你想解锁<br>pthread_mutexattr_gettype()<br>pthread_mutexattr_settype()</p><p>16.条件变量属性<br>pthread_condarrt_init()<br>pthread_condarrt_destory()</p><p>17.读写锁属性</p><p>18.重入<br>多线程io<br>线程与信号：之前讲的进程响应信号的机制只是单进程单线程，学习了线程之后，才知道真是的进程只有一个pending，而线程有pending与mask，扎回main的时候mask要既与线程pengding与，又要与进程pending与<br>  pthread_sigmask()<br>  sigwait()<br>  pthread_kill()<br>线程和fork：当一个进程有三个线程，此时创建子进程，子进程有几个线程?不同线程原语对fork出的进程结果不一样</p><p>19.openmp线程标准-&gt;<a href="http://www.openmp.org/">www.OpenMP.org</a></p>]]></content>
     
     
       
@@ -369,69 +424,6 @@
       
     <summary type="html">&lt;p&gt;1.什么是虚函数？&lt;br&gt;答：首先虚函数必须是基类的非静态成员函数！在前面加上virtual即变为虚函数。生成虚函数后会在类内生成指针”vfptr”(在类内)，指针指向”vftable表”(不在类内)，表中是该虚函数的入口地址。&lt;/p&gt;
 &lt;p&gt;2.虚函数有什么用？&lt;br&gt;答</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Linux 1</title>
-    <link href="http://example.com/2023/02/28/Linux-1/"/>
-    <id>http://example.com/2023/02/28/Linux-1/</id>
-    <published>2023-02-28T09:02:20.000Z</published>
-    <updated>2023-04-05T06:04:46.528Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.Linux磁盘分区的步骤？<br>答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。</p><p>2.Linux文件系统格式特点？<br>答：从物理存储看&#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&#x2F;‘是最底层的分区，boot与hoom都是’&#x2F;‘的子目录。</p><p>3.errno可以想象为os定义的全局变量可直接当整型使用。但要引用头文件，errno.h。之后用strerror(errno)返回string类型可以用%s打印，strerror的头文件是string.h。</p><p>4.*与%都是通配符，但是%有锁定的意味。</p><p>5.在使用vim的时候千万不要用Ctrl+s否则vim会卡死，使用Ctrl+q可以退出卡死状态</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.Linux磁盘分区的步骤？&lt;br&gt;答：第一步分区，第二步写入文件系统格式化，第三步给硬盘与分区起名，第四步挂载。&lt;/p&gt;
-&lt;p&gt;2.Linux文件系统格式特点？&lt;br&gt;答：从物理存储看&amp;#x2F;,boot,hoom,都是地位相同的分区，但是从物理上看’&amp;#x2F;‘是</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>day 9</title>
-    <link href="http://example.com/2023/02/28/C++8/"/>
-    <id>http://example.com/2023/02/28/C++8/</id>
-    <published>2023-02-28T01:08:34.000Z</published>
-    <updated>2023-02-28T07:44:38.400Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.声明重载函数的规则？<br>答：以重载关系运算符为例，判断：对象1&#x3D;&#x3D;对象2，此时使用成员函数重载会看作对象1在调用对象2。故可以写void  operator&#x3D;&#x3D;(类名  &amp;对象2).</p><p>2.什么是仿函数？<br>答：重载().</p><p>3.子类与继承的父类成员重名会怎么样？<br>答：同名子类成员会隐藏父类成员，同名子类成员函数会隐藏所有（重载）父类同名成员函数。</p><p>4.什么是菱形继承问题，要怎么解决？<br>答：继承图是一个菱形，进而导致孙子类继承了两份爷爷类的数据，而不知道使用哪个的问题。使用虚继承的方式，用virtual关键字修饰爷爷类，称为虚基类。从而使孙子所继承的成员的值是两个父亲两次赋值中的最后一次的数据。<br>注意：虚继承底层是把两个父亲继承的成员变量修改为指针，指向了虚基类的成员变量（爷爷的成员变量）。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.声明重载函数的规则？&lt;br&gt;答：以重载关系运算符为例，判断：对象1&amp;#x3D;&amp;#x3D;对象2，此时使用成员函数重载会看作对象1在调用对象2。故可以写void  operator&amp;#x3D;&amp;#x3D;(类名  &amp;amp;对象2).&lt;/p&gt;
-&lt;p&gt;2.什么是仿函数？&lt;</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>day 8</title>
-    <link href="http://example.com/2023/02/27/C++7/"/>
-    <id>http://example.com/2023/02/27/C++7/</id>
-    <published>2023-02-27T00:52:49.000Z</published>
-    <updated>2023-02-27T09:41:39.737Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.this指针如何解决命名冲突的问题？<br>答：由于命名不规范导致成员函数内的参数名与类内成员名相同，进而调用成员函数给类内成员赋值时导致命名冲突，此时可使用this指针指向成员。this指向的永远是调用成员函数的对象。</p><p>2.如何理解返回this*时要求函数返回类型是[类名&amp;]而不是[类名]？<br>答：最关键的是如果返回类名，那么会调用默认拷贝构造函数创建一个新的对象，新对象内成员的值就是原对象的值！而返回值为类&amp;时相当于：类名&amp;  (被返回的)变量名&#x3D;*this（类名  &amp;变量名&#x3D;*this），返回的就是原对象本身。</p><p>3.阐述空指针有时可以调用成员函数有时却不能的原因。<br>答：空指针能调用的成员函数大都是共有的与静态成员变量类似，不属于某一个对象，所以谁都可以调用。而当空指针调用的函数使用到了成员变量时，这个成员变量是对象特有的，便不能访问。</p><p>4.怎么重载左移运算符？<br>答：在c++中只能使用全局函数重载cout&#x2F;cin，否则必须修改标准输入输出的类。右移运算符重载是要重载cout，cout是ostream类型，且cout在c++中唯一，所以使用operator时要加引用。又因为cout属于链式函数，想要链式使用必须有返回值且返回值是cout。<br>eg: ostream &amp; operator&lt;&lt;(ostream &amp;cout,类名 &amp;某对象)；(&amp;cout必须在&amp;某对象前面才能做出[cout&lt;&lt; 某对象],否则这俩位置相反，这也是无法使用成员函数重载的原因)。<br>注意：重载函数中第一个参数只是cout的别名，也可以写成out。</p><p>5.重载++运算符时如何区分前置与后置？<br>答：靠参数区分，前置++无参，后置++有int占位参数。由于后置++函数体实现依靠：先记录“类名 tmp&#x3D;*this”,再加1，最后返回tmp(是局部变量!)，并不是本身因为本身已经+1了，不是后置++要的结果。所以返回值类型不加引用。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;1.this指针如何解决命名冲突的问题？&lt;br&gt;答：由于命名不规范导致成员函数内的参数名与类内成员名相同，进而调用成员函数给类内成员赋值时导致命名冲突，此时可使用this指针指向成员。this指向的永远是调用成员函数的对象。&lt;/p&gt;
-&lt;p&gt;2.如何理解返回this*时要求函</summary>
       
     
     

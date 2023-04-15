@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="description" content=""><meta name="keyword"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Linux 高级IO</title><link rel="shortcut icon" href="/images/avatar.png" type="image/x-icon"><link href="/styles/site.css" rel="stylesheet"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head><body><header class="container" id="header"><div class="header"><div class="header-left"><div class="avatar"><img src="/images/avatar.png"></div><div class="author"><div class="author-name"><a href="/">Zhaogy233</a></div><div class="about-me">Hi~</div></div></div><div class="header-right"><ul class="navigation"><li><a href="/archives">归档</a></li></ul></div><div class="about-me-mask"><div class="about-me-wrap"><div class="about-me__header"><div class="avatar"><img src="/images/avatar.png"></div></div><ul class="socials"><li class="social-item"><span class="label"><img src="/images/socials/github.svg" alt="https://github.com/Zhaogy233"></span><a href="https://github.com/Zhaogy233" target="_blank" title="https://github.com/Zhaogy233">https://github.com/Zhaogy233</a></li><li class="social-item"><span class="label"><img src="/images/socials/email.svg" alt="3468482206@qq.com"></span><span>3468482206@qq.com</span></li><li class="social-item"><span class="label"><img src="/images/socials/wechat.svg" alt="z15566143013"></span><span>z15566143013</span></li></ul></div></div></div></header><div class="container post"><section class="article"><div class="title">Linux 高级IO</div><div class="date">写于2023-04-12T10:20:00+08:00</div><div class="content"><p>1.非阻塞IO<br>简单流程：自然流程是结构化的<br>复杂流程：自然流程不是结构化的(使用选择，循环，if不能简单的描述出来，必须要用到跳转goto等)<br>eg:nonblock 使用有限状态机实现数据中继(重构mycopy)<br>eg:中继引擎relayer,两对中继器互不干扰<br>2.linux画图工具dia</p>
+<p>3.IO多路转接：对于IO密集型的代码，用它来监视文件描述符的行为。<br>类型fd_set为文件描述符的集合</p>
+<p>select(int nfds,读集,写集,异常集,struct timeval * timeout );nfds是你所监视的文件描述符中最大的那个再加一,如果不设置timeout那就是阻塞的状态，等到感兴趣的事件发生才开始调用,这就是非忙等的状态机<br>优点：可移植性好<br>缺点：一.参数类型nfds不能超过整型最大范围，二.集合没有const修饰一旦成功匹配一个fd，所有集合都被清空，三.监视事件太单一<br>eg:select.c</p>
+<p>poll();user态<br>结构体pollfd中的events与revents都是位图，用或的方式赋值，用与的方式取值<br>eg:poll.c</p>
+<p>epoll();kernel态<br>eg:epoll.c<br>类型uint32_t为无符号32位整型数</p>
+<p>4.其他读写函数<br>readv()<br>writev()<br>相比于read，write一次只能发送一个IO请求，并将数据读写到一个指定的缓冲区，readv与writev可一次性指定多个缓冲区读写，<br>eg:rwv.c</p>
+<p>5.存储映射IO<br>mmap()<br>munmap()<br>如果mmap使用匿名方式，那么可以当成malloc使用，此时的munmap可以当成free使用<br>eg:mmap.c<br>有亲缘关系的进程间通信：先mmap，再fork，这样父子进程就可以通过映射的空间通信，即共享内存eg:sharemem.c</p>
+<p>6.文件锁<br>fcntl()<br>lockf()<br>flock()<br>有时候close关闭文件会意外解锁，因为文件锁锁住的是inode，eg:flock.c</p>
+</div><div class="tags"></div></section></div><div class="container"><ul class="nav"><li>上一篇：<a href="/2023/04/15/Linux-%E7%AE%A1%E9%81%93/">Linux 管道</a></li><li>下一篇：<a href="/2023/04/08/Linux-%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91/">Linux 线程并发</a></li></ul></div><div id="backToTop"><div class="back-arrow back-arrow-left"></div><div class="back-arrow back-arrow-right"></div></div><footer class="container"><div class="rights"><span>Powered by </span><a href="http://hexo.io" target="_blank">Hexo</a><span>, Theme </span><a href="https://github.com/gary-Shen/hexo-theme-bear" target="_blank">Bear</a><span>.</span></div></footer>
+<script src="/script/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<script src="/script/index.js"></script>
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-61220413-1', 'auto');
+ga('send', 'pageview');</script>
+<script src="/script/post.js"></script>
+</body></html>
